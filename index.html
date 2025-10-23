@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +11,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="HbeeBuzz">
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiU2NvdXRpZXIgLSBFbWFpbCBPdXRyZWFjaCIsInNob3J0X25hbWUiOiJTY291dGllciIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZjhmOWZhIiwidGhlbWVfY29sb3IiOiIjMWE3M2U4IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBRkFBQUFCUUNBSUFBQUNXMDFTSkFBQUFFRWxFUVZSWUdLM1o1MVlSS3dBVkFBQUEiLCJzaXplcyI6IjgweDgwIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSGJlZUJ1enogLSBFbWFpbCBPdXRyZWFjaCIsInNob3J0X25hbWUiOiJIYmVlQnV6eiIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZjhmOWZhIiwidGhlbWVfY29sb3IiOiIjMWE3M2U4IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBRkFBQUFCUUNBSUFBQUNXMDFTSkFBQUFFRWxFUVZSWUdLM1o1MVlSS3dBVkFBQUEiLCJzaXplcyI6IjgweDgwIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
     
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BGZ0365NTS"></script>
@@ -57,8 +55,6 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
 
     <!-- Added Google Sans font -->
-    
-    
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
    
     <!-- Tailwind CSS -->
@@ -298,8 +294,6 @@
       color: #e8eaed;
     }
     
-
-    
     /* Optimized template chips */
     .template-chip {
       display: inline-flex;
@@ -407,15 +401,12 @@
     /* Performance optimizations */
     .email-container {
       contain: layout style paint;
-      
     }
     
     .smooth-scroll {
       transform: translateZ(0);
       scroll-behavior: smooth;
     }
-
- 
 
     /* Lightning-fast loading states */
     .loading-skeleton {
@@ -559,20 +550,160 @@
     .dark .perf-meter::before { background: #2d2e30; }
     
     /* 24h Tracker Styles */
-#24hProgressBar {
-  transition: width 0.3s ease;
-}
+    #24hProgressBar {
+      transition: width 0.3s ease;
+    }
 
-#summaryPanel {
-  animation: slideIn 0.2s ease forwards;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-}
+    #summaryPanel {
+      animation: slideIn 0.2s ease forwards;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
 
-#summaryPanel.show {
-  max-height: 300px;
-}
+    #summaryPanel.show {
+      max-height: 300px;
+    }
+
+    /* Rich Text Editor Styles */
+    #richTextEditor {
+      font-family: 'Google Sans', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 12px;
+      min-height: 200px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    #richTextEditor:focus {
+      outline: none;
+      border-color: var(--blue-500);
+      box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.12);
+    }
+
+    /* Mobile-optimized rich text content */
+    #richTextEditor h1, 
+    #richTextEditor h2, 
+    #richTextEditor h3 {
+      font-family: 'Google Sans', system-ui, sans-serif;
+      margin: 0.5em 0;
+      line-height: 1.3;
+    }
+
+    #richTextEditor h1 { font-size: 1.5rem; font-weight: 600; }
+    #richTextEditor h2 { font-size: 1.25rem; font-weight: 600; }
+    #richTextEditor h3 { font-size: 1.125rem; font-weight: 500; }
+
+    #richTextEditor p {
+      margin: 0.5em 0;
+    }
+
+    #richTextEditor ul, 
+    #richTextEditor ol {
+      margin: 0.5em 0;
+      padding-left: 1.5em;
+    }
+
+    #richTextEditor li {
+      margin: 0.25em 0;
+    }
+
+    #richTextEditor a {
+      color: var(--blue-500);
+      text-decoration: underline;
+    }
+
+    #richTextEditor blockquote {
+      border-left: 4px solid var(--blue-500);
+      margin: 1em 0;
+      padding-left: 1em;
+      font-style: italic;
+      color: var(--gray-600);
+    }
+
+    /* Mobile-responsive images */
+    #richTextEditor img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    /* Table styles for mobile */
+    #richTextEditor table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1em 0;
+    }
+
+    #richTextEditor table, 
+    #richTextEditor th, 
+    #richTextEditor td {
+      border: 1px solid var(--gray-300);
+    }
+
+    #richTextEditor th, 
+    #richTextEditor td {
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    #richTextEditor th {
+      background-color: var(--gray-100);
+      font-weight: 600;
+    }
+
+    /* Dark mode support */
+    .dark #richTextEditor {
+      color: #e8eaed;
+      background-color: #2d2e30;
+    }
+
+    .dark #richTextEditor table, 
+    .dark #richTextEditor th, 
+    .dark #richTextEditor td {
+      border-color: var(--gray-600);
+    }
+
+    .dark #richTextEditor th {
+      background-color: var(--gray-700);
+    }
+
+    /* Rich Text Preview Modal */
+    .rich-text-preview {
+      max-width: 100%;
+      word-wrap: break-word;
+    }
+
+    .rich-text-preview img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .rich-text-preview table {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    /* Toolbar active states */
+    .rich-toolbar-active {
+      background-color: var(--blue-500) !important;
+      color: white !important;
+    }
+
+    /* Rich text toolbar */
+    .rich-text-toolbar {
+      background-color: #f8f9fa;
+      border: 1px solid #dadce0;
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      padding: 8px;
+    }
+
+    .dark .rich-text-toolbar {
+      background-color: #2d2e30;
+      border-color: #5f6368;
+    }
     </style>
     
     <style>
@@ -602,19 +733,6 @@
   }
 </script>
 
-<style>
-
-    /* V2 code editor & preview styles */
-    .code-editor {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
-      min-height: 120px;
-      white-space: pre-wrap;
-    }
-    .render-preview {
-      min-height: 120px;
-    }
-
-</style>
 </head>
 
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen flex flex-col">
@@ -914,35 +1032,127 @@
               </div>
             </div>
 
-            <!-- Message Body Section -->
-
-            <!-- Message Composer: Text | Code | Preview (REPLACED V2) -->
+            <!-- Enhanced Message Body Section with Rich Text Editor -->
             <div>
-              <label class="block text-sm font-medium mb-2">Message Body <span class="text-xs text-gray-400">(Text / HTML supported)</span></label>
+              <label for="body" class="block text-sm font-medium flex items-center gap-2 text-gray-700 dark:text-gray-300 mb-2">
+                <i class="ri-file-text-line text-green-500"></i>
+                Message Body <small class="ml-2 text-xs text-gray-500 dark:text-gray-400">(Rich Text & HTML Support)</small>
+                <div class="flex gap-1 ml-auto">
+                  <button type="button" id="toggleEditor" class="gmail-btn-secondary py-1 px-3 text-xs flex items-center gap-1">
+                    <i class="ri-code-s-slash-line"></i> Toggle Editor
+                  </button>
+                </div>
+              </label>
 
-              <!-- Tabs -->
-              <div class="inline-flex bg-gray-100 rounded-full p-1 mb-3" role="tablist" aria-label="Message modes">
-                <button id="tabText" class="px-3 py-1 rounded-full bg-white text-sm font-medium shadow-sm" data-mode="text">✍️ Text</button>
-                <button id="tabCode" class="px-3 py-1 rounded-full text-sm font-medium text-gray-600" data-mode="code">&lt;/&gt; Code</button>
-                <button id="tabPreview" class="px-3 py-1 rounded-full text-sm font-medium text-gray-600" data-mode="preview">👁 Preview</button>
+              <!-- Rich Text Editor Container -->
+              <div id="richTextContainer" class="hidden">
+                <!-- Rich Text Toolbar -->
+                <div class="rich-text-toolbar flex flex-wrap gap-1">
+                  <!-- Formatting Buttons -->
+                  <button type="button" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700" data-command="bold" title="Bold">
+                    <i class="ri-bold"></i>
+                  </button>
+                  <button type="button" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700" data-command="italic" title="Italic">
+                    <i class="ri-italic"></i>
+                  </button>
+                  <button type="button" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700" data-command="underline" title="Underline">
+                    <i class="ri-underline"></i>
+                  </button>
+                  
+                  <!-- Alignment -->
+                  <button type="button" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700" data-command="justifyLeft" title="Align Left">
+                    <i class="ri-align-left"></i>
+                  </button>
+                  <button type="button" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700" data-command="justifyCenter" title="Center">
+                    <i class="ri-align-center"></i>
+                  </button>
+                  <button type="button" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700" data-command="justifyRight" title="Align Right">
+                    <i class="ri-align-right"></i>
+                  </button>
+                  
+                  <!-- Lists -->
+                  <button type="button" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700" data-command="insertUnorderedList" title="Bullet List">
+                    <i class="ri-list-unordered"></i>
+                  </button>
+                  <button type="button" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700" data-command="insertOrderedList" title="Numbered List">
+                    <i class="ri-list-ordered"></i>
+                  </button>
+                  
+                  <!-- Links -->
+                  <button type="button" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700" data-command="createLink" title="Insert Link">
+                    <i class="ri-link"></i>
+                  </button>
+                  <button type="button" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700" data-command="unlink" title="Remove Link">
+                    <i class="ri-link-unlink"></i>
+                  </button>
+                  
+                  <!-- HTML -->
+                  <button type="button" id="insertHTML" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700" title="Insert HTML">
+                    <i class="ri-code-view"></i>
+                  </button>
+                  
+                  <!-- Mobile Optimization -->
+                  <button type="button" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700" data-command="formatBlock" data-value="p" title="Paragraph">
+                    <i class="ri-paragraph"></i>
+                  </button>
+                  <button type="button" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700" data-command="formatBlock" data-value="h3" title="Heading">
+                    <i class="ri-h-1"></i>
+                  </button>
+                  
+                  <!-- Spacer -->
+                  <div class="flex-grow"></div>
+                  
+                  <!-- Preview -->
+                  <button type="button" id="previewRichText" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-blue-500" title="Preview">
+                    <i class="ri-eye-line"></i>
+                  </button>
+                </div>
+
+                <!-- Rich Text Editor -->
+                <div 
+                  id="richTextEditor" 
+                  class="w-full gmail-input resize-none focus-effect"
+                  contenteditable="true"
+                  style="border-top: none; border-radius: 0 0 8px 8px;"
+                ></div>
               </div>
 
-              <!-- Text mode -->
-              <textarea id="bodyText" class="w-full gmail-input border rounded-lg p-3 code-editor" rows="6" placeholder="Write a plain text message..."></textarea>
+              <!-- Original Textarea (Hidden by default) -->
+              <div id="plainTextContainer">
+                <textarea
+                  id="body"
+                  class="w-full gmail-input resize-none focus-effect"
+                  rows="6"
+                  placeholder="Write your message here... Use {name} for names and {company} for companies. AI will optimize your content."
+                  required
+                ></textarea>
+              </div>
 
-              <!-- Code mode -->
-              <textarea id="bodyCode" class="w-full gmail-input border rounded-lg p-3 code-editor hidden" rows="6" placeholder="Paste full HTML here..."></textarea>
-
-              <!-- Render preview -->
-              <div id="bodyPreview" class="w-full gmail-card render-preview hidden bg-white mt-2 p-3"></div>
-
-              <!-- Hidden input used as form payload -->
-              <input type="hidden" id="bodyValue" name="body">
-              <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
-                <div id="bodyCharCount">0 chars</div>
-                <div class="flex gap-2">
-                  <button id="insertTemplate" type="button" class="text-sm text-blue-600 hover:underline">Insert Template</button>
+              <!-- Body Templates -->
+              <div class="flex flex-wrap mt-2">
+                <div class="template-chip" data-target="body" data-template="Hi {name},&#10;&#10;I hope this email finds you well. I wanted to reach out about an exciting opportunity that could benefit {company}.&#10;&#10;Would you be available for a quick 15-minute call this week?&#10;&#10;Best regards,&#10;[Your Name]">
+                  <i class="ri-chat-1-line mr-1"></i> Professional
                 </div>
+                <div class="template-chip" data-target="body" data-template="Hello {name},&#10;&#10;I noticed your work at {company} and was impressed by your recent achievements. I'd love to discuss how we could potentially collaborate.&#10;&#10;Are you free for a coffee chat next week?&#10;&#10;Cheers,&#10;[Your Name]">
+                  <i class="ri-user-voice-line mr-1"></i> Casual
+                </div>
+                <div class="template-chip" data-target="body" data-template="Dear {name},&#10;&#10;I'm writing to invite you to our exclusive event happening next month. Given {company}'s reputation in the industry, your presence would be invaluable.&#10;&#10;Please find the details attached.&#10;&#10;Warm regards,&#10;[Your Name]">
+                  <i class="ri-calendar-event-line mr-1"></i> Invitation
+                </div>
+              </div>
+              
+              <div class="flex justify-between items-center mt-2">
+                <div class="text-xs text-blue-600 dark:text-blue-400 flex items-center gap-4">
+                  <span id="editorStatus">
+                    <i class="ri-text-wrap"></i> Plain Text Mode
+                  </span>
+                  <div class="flex items-center gap-1">
+                    <span id="mobilePreviewStatus" class="hidden text-green-600">
+                      <i class="ri-smartphone-line"></i> Mobile Optimized
+                    </span>
+                  </div>
+                </div>
+                <span id="bodyCount" class="text-xs text-gray-500 dark:text-gray-400">0/5000</span>
               </div>
             </div>
 
@@ -1629,20 +1839,16 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
       stopAuto: document.getElementById('stopAuto'),
       quickActions: document.getElementById('quickActions'),
       toggleQuickActions: document.getElementById('toggleQuickActions'),
-      quickActionsIcon: document.getElementById('quickActionsIcon')
+      quickActionsIcon: document.getElementById('quickActionsIcon'),
+      // Rich text editor elements
+      toggleEditor: document.getElementById('toggleEditor'),
+      richTextContainer: document.getElementById('richTextContainer'),
+      plainTextContainer: document.getElementById('plainTextContainer'),
+      richTextEditor: document.getElementById('richTextEditor'),
+      editorStatus: document.getElementById('editorStatus'),
+      mobilePreviewStatus: document.getElementById('mobilePreviewStatus'),
+      previewRichText: document.getElementById('previewRichText')
     };
-
-    // Lightning-fast data storage
-    let emailData = {
-      recipients: localStorage.getItem('recipients') || '',
-      subject: localStorage.getItem('subject') || '',
-      body: localStorage.getItem('body') || ''
-    };
-
-    // Set initial values
-    elements.recipientsInput.value = emailData.recipients;
-    elements.subjectInput.value = emailData.subject;
-    elements.bodyInput.value = emailData.body;
 
     // Global variables with performance optimization
     let allTimeSent = new Set(JSON.parse(localStorage.getItem('allTimeSent') || '[]'));
@@ -1661,6 +1867,9 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
       emailsSent: 0,
       averageSpeed: 0
     };
+
+    // Rich Text Editor Variables
+    let isRichTextMode = false;
 
     // Helper functions
     function extractNameFromEmail(email) {
@@ -1757,10 +1966,10 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
       const bodyLength = elements.bodyInput.value.length;
 
       elements.subjectCount.innerText = `${subjectLength}/200`;
-      elements.bodyCount.innerText = `${bodyLength}/2000`;
+      elements.bodyCount.innerText = `${bodyLength}/5000`;
 
       if (subjectLength > 200) elements.subjectInput.value = elements.subjectInput.value.slice(0, 200);
-      if (bodyLength > 2000) elements.bodyInput.value = elements.bodyInput.value.slice(0, 2000);
+      if (bodyLength > 5000) elements.bodyInput.value = elements.bodyInput.value.slice(0, 5000);
     }
 
     elements.subjectInput.addEventListener('input', updateCharacterCount);
@@ -1835,7 +2044,12 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
         if (target === 'subject') {
           elements.subjectInput.value = template;
         } else if (target === 'body') {
-          elements.bodyInput.value = template.replace(/&#10;/g, '\n');
+          if (isRichTextMode) {
+            elements.richTextEditor.innerHTML = template.replace(/&#10;/g, '<br>');
+          } else {
+            elements.bodyInput.value = template.replace(/&#10;/g, '\n');
+          }
+          updateBodyCount();
         }
         updateCharacterCount();
         showAlert('Template applied successfully!');
@@ -1847,12 +2061,193 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
         const body = template.dataset.templateBody.replace(/&#10;/g, '\n');
         
         elements.subjectInput.value = subject;
-        elements.bodyInput.value = body;
+        if (isRichTextMode) {
+          elements.richTextEditor.innerHTML = body.replace(/\n/g, '<br>');
+        } else {
+          elements.bodyInput.value = body;
+        }
         updateCharacterCount();
+        updateBodyCount();
         
         showAlert('AI-enhanced template applied!');
       }
     });
+
+    // Rich Text Editor Functionality
+    function initRichTextEditor() {
+      // Toggle between rich text and plain text
+      elements.toggleEditor.addEventListener('click', function() {
+        isRichTextMode = !isRichTextMode;
+        
+        if (isRichTextMode) {
+          // Switch to rich text mode
+          elements.richTextContainer.classList.remove('hidden');
+          elements.plainTextContainer.classList.add('hidden');
+          elements.editorStatus.innerHTML = '<i class="ri-code-s-slash-line"></i> Rich Text Mode';
+          elements.toggleEditor.innerHTML = '<i class="ri-text-wrap"></i> Switch to Plain Text';
+          
+          // Sync content from textarea to rich editor
+          elements.richTextEditor.innerHTML = convertToHTML(elements.bodyInput.value);
+          updateBodyCount();
+        } else {
+          // Switch to plain text mode
+          elements.richTextContainer.classList.add('hidden');
+          elements.plainTextContainer.classList.remove('hidden');
+          elements.editorStatus.innerHTML = '<i class="ri-text-wrap"></i> Plain Text Mode';
+          elements.toggleEditor.innerHTML = '<i class="ri-code-s-slash-line"></i> Switch to Rich Text';
+          
+          // Sync content from rich editor to textarea
+          elements.bodyInput.value = convertToPlainText(elements.richTextEditor.innerHTML);
+          updateBodyCount();
+        }
+      });
+
+      // Rich text toolbar functionality
+      document.querySelectorAll('#richTextContainer [data-command]').forEach(button => {
+        button.addEventListener('click', function() {
+          const command = this.dataset.command;
+          const value = this.dataset.value;
+          
+          document.execCommand(command, false, value);
+          elements.richTextEditor.focus();
+          updateBodyCount();
+          checkMobileOptimization();
+        });
+      });
+
+      // HTML insertion
+      document.getElementById('insertHTML').addEventListener('click', function() {
+        const htmlCode = prompt('Enter HTML code:');
+        if (htmlCode) {
+          document.execCommand('insertHTML', false, htmlCode);
+          updateBodyCount();
+          checkMobileOptimization();
+        }
+      });
+
+      // Link creation
+      document.querySelector('[data-command="createLink"]').addEventListener('click', function() {
+        const url = prompt('Enter URL:');
+        if (url) {
+          document.execCommand('createLink', false, url);
+        }
+      });
+
+      // Rich text preview
+      elements.previewRichText.addEventListener('click', function() {
+        showRichTextPreview(elements.richTextEditor.innerHTML);
+      });
+
+      // Update character count for rich text
+      elements.richTextEditor.addEventListener('input', function() {
+        updateBodyCount();
+        checkMobileOptimization();
+        
+        // Auto-save to textarea for form submission
+        elements.bodyInput.value = convertToPlainText(this.innerHTML);
+      });
+
+      // Check for mobile optimization
+      function checkMobileOptimization() {
+        const content = elements.richTextEditor.innerHTML;
+        const hasLargeImages = content.includes('width=') || content.includes('height=');
+        const hasFixedWidthTables = content.includes('width:') || content.includes('width=');
+        const hasComplexLayouts = content.includes('float:') || content.includes('position:');
+        
+        if (hasLargeImages || hasFixedWidthTables || hasComplexLayouts) {
+          elements.mobilePreviewStatus.classList.remove('hidden');
+          elements.mobilePreviewStatus.innerHTML = '<i class="ri-smartphone-line"></i> Check Mobile Layout';
+          elements.mobilePreviewStatus.className = elements.mobilePreviewStatus.className.replace('text-green-600', 'text-yellow-600');
+        } else {
+          elements.mobilePreviewStatus.classList.remove('hidden');
+          elements.mobilePreviewStatus.innerHTML = '<i class="ri-smartphone-line"></i> Mobile Optimized';
+          elements.mobilePreviewStatus.className = elements.mobilePreviewStatus.className.replace('text-yellow-600', 'text-green-600');
+        }
+      }
+
+      // Enhanced character count for rich text
+      function updateBodyCount() {
+        let content = '';
+        if (isRichTextMode) {
+          content = convertToPlainText(elements.richTextEditor.innerHTML);
+        } else {
+          content = elements.bodyInput.value;
+        }
+        
+        const length = content.length;
+        elements.bodyCount.innerText = `${length}/5000`;
+        
+        if (length > 5000) {
+          elements.bodyCount.classList.add('text-red-500');
+        } else {
+          elements.bodyCount.classList.remove('text-red-500');
+        }
+      }
+
+      // Convert HTML to plain text for counting
+      function convertToPlainText(html) {
+        const temp = document.createElement('div');
+        temp.innerHTML = html;
+        return temp.textContent || temp.innerText || '';
+      }
+
+      // Convert plain text to basic HTML
+      function convertToHTML(text) {
+        return text
+          .replace(/\n/g, '<br>')
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+          .replace(/_(.*?)_/g, '<u>$1</u>');
+      }
+
+      // Show rich text preview
+      function showRichTextPreview(html) {
+        const previewModal = document.createElement('div');
+        previewModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        previewModal.innerHTML = `
+          <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl mx-4 max-h-[80vh] overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+              <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Rich Text Email Preview</h3>
+              <button class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" id="closeRichPreview">
+                <i class="ri-close-line text-xl"></i>
+              </button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[60vh]">
+              <div class="rich-text-preview bg-white dark:bg-gray-900 p-4 rounded border">
+                ${html || '<p class="text-gray-500">No content to preview</p>'}
+              </div>
+            </div>
+            <div class="flex gap-3 p-4 border-t border-gray-200 dark:border-gray-700">
+              <button class="gmail-btn-secondary flex-1 py-2 rounded-lg" id="closeRichPreviewBtn">Close</button>
+              <button class="gmail-btn flex-1 py-2 rounded-lg" id="sendTestRich">Send Test</button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(previewModal);
+        
+        // Close preview
+        const closePreview = () => previewModal.remove();
+        document.getElementById('closeRichPreview').addEventListener('click', closePreview);
+        document.getElementById('closeRichPreviewBtn').addEventListener('click', closePreview);
+        
+        // Send test with rich content
+        document.getElementById('sendTestRich').addEventListener('click', function() {
+          const testEmail = prompt('Enter test email address:');
+          if (testEmail && isValidEmail(testEmail)) {
+            // Store rich HTML content temporarily
+            localStorage.setItem('richTestContent', html);
+            const mailto = `mailto:${testEmail}?subject=Test+Rich+Email&body=${encodeURIComponent('Check your email client for rich content preview')}`;
+            window.open(mailto, '_blank');
+            showAlert('Test email opened! Rich content will be preserved in your email client.');
+          }
+          closePreview();
+        });
+      }
+    }
+
+    // Initialize rich text editor
+    initRichTextEditor();
 
     // Smart scheduling functionality
     elements.scheduleToggle.addEventListener('change', function() {
@@ -1914,23 +2309,39 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
       });
     }
 
-    // Lightning-fast form submission
+    // FIXED: Lightning-fast form submission
     elements.emailForm.addEventListener('submit', function (event) {
       event.preventDefault();
 
       const recipients = elements.recipientsInput.value.split('\n').filter(r => r.trim());
       const subjectTemplate = elements.subjectInput.value;
-      const bodyTemplate = elements.bodyInput.value;
+      let bodyTemplate = elements.bodyInput.value;
+      
+      // Use rich text content if in rich text mode
+      if (isRichTextMode) {
+        bodyTemplate = elements.richTextEditor.innerHTML;
+      }
       
       if (recipients.length === 0) {
         showAlert('Please add at least one recipient email.', 'error');
         return;
       }
       
+      // Validate that we have at least some valid emails
+      const validRecipients = recipients.filter(email => {
+        const trimmed = email.trim();
+        return trimmed && isValidEmail(trimmed);
+      });
+      
+      if (validRecipients.length === 0) {
+        showAlert('Please add at least one valid email address.', 'error');
+        return;
+      }
+      
       if (elements.scheduleToggle.checked) {
-        startAutoSend(recipients, subjectTemplate, bodyTemplate);
+        startAutoSend(validRecipients, subjectTemplate, bodyTemplate);
       } else {
-        processEmails(recipients, subjectTemplate, bodyTemplate);
+        processEmails(validRecipients, subjectTemplate, bodyTemplate);
       }
     });
 
@@ -1974,8 +2385,6 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
           currentLink.click();
           currentEmailIndex++;
           
-        
-          
           // Update live activity
           addLiveActivity(`📧 Auto-sent to ${currentLink.textContent.split('. ')[1]}`);
         }
@@ -2018,7 +2427,7 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
     elements.resumeAuto.addEventListener('click', resumeAutoSend);
     elements.stopAuto.addEventListener('click', stopAutoSend);
 
-    // Lightning-fast email processing
+    // FIXED: Lightning-fast email processing
     function processEmails(recipientList, subjectTemplate, bodyTemplate) {
       const submitBtn = elements.emailForm.querySelector('button[type="submit"]');
       const originalBtnText = submitBtn.innerHTML;
@@ -2040,74 +2449,28 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
 
       updateCounters();
 
-      // Optimized worker code with faster name extraction
+      // FIXED: Optimized worker code with proper email validation
       const workerCode = `
         function extractNameFromEmail(email) {
           if (!email || !email.includes('@')) return 'there';
           
           const commonFirstNames = [
-            'john', 'jane', 'david', 'mary', 'james', 'linda', 'robert', 'michael', 'sarah', 'william', 
-            'patricia', 'joseph', 'jennifer', 'thomas', 'elizabeth', 'charles', 'susan', 'daniel', 'margaret',
-            'matthew', 'emma', 'anthony', 'olivia', 'mark', 'emily', 'paul', 'sophia', 'steven', 'ava', 
-            'andrew', 'isabella', 'joshua', 'mia', 'kenneth', 'charlotte', 'kevin', 'amelia', 'brian', 'harper',
-            'george', 'evelyn', 'timothy', 'anna', 'ronald', 'hannah', 'jason', 'leah', 'edward', 'scarlett',
-            'jeffrey', 'grace', 'ryan', 'lily', 'jacob', 'madison', 'gary', 'layla', 'nicholas', 'zoey',
-            'eric', 'camila', 'adam', 'abigail', 'amanda', 'riley', 'jonathan', 'zoe', 'justin', 'chloe',
-            'scott', 'penelope', 'brandon', 'hazel', 'frank', 'violet', 'benjamin', 'victoria', 'gregory',
-            'peter', 'jack', 'nathan', 'ali', 'stephen', 'dennis', 'joshua', 'tyler', 'aaron', 'henry',
-            'douglas', 'jose', 'peter', 'adam', 'zachary', 'walter', 'jerry', 'patrick', 'noah', 'amy',
-            'michelle', 'kimberly', 'deborah', 'judy', 'lisa', 'sandra', 'ashley', 'donna', 'carol',
-            'jessica', 'nancy', 'karen', 'betty', 'helen', 'dorothy', 'sharon', 'ruth', 'angela', 'melissa',
-            'diane', 'alice', 'marie', 'ann', 'catherine', 'laura', 'rebecca', 'joyce', 'rachel', 'tina',
-            'sara', 'andrea', 'nicole', 'janet', 'julia', 'sophia', 'ethan', 'mason', 'liam', 'oliver',
-            'elijah', 'logan', 'lucas', 'carter', 'isaac', 'gabriel', 'owen', 'chike', 'ayo', 'tunde',
-            'amina', 'fatima', 'kemi', 'tosin', 'adebola', 'chijioke', 'ugochi', 'khalid', 'agatha', 'lola',
-            'emma', 'janelle', 'mahatma', 'nucture', 'peace'
+            'john', 'jane', 'david', 'mary', 'james', 'linda', 'robert', 'michael', 'sarah', 'william'
           ];
           
           const nonPersonalPrefixes = [
-            'info', 'infos', 'contact', 'contacts', 'support', 'mail', 'hello', 'help', 'enquiries', 
-            'enquiry', 'inquiry', 'inquiries', 'store', 'sales', 'kontact', 'hi', 'official', 'service', 
-            'contacto', 'admin', 'hey', 'orders', 'customercare', 'customer', 'returns', 'shop', 'delivery', 
-            'kontakt', 'www', 'team', 'business', 'customers', 'chat', 'marketing', 'noreply', 'no-reply',
-            'newsletter', 'billing', 'account', 'careers', 'webmaster', 'media', 'press', 'hr', 'jobs',
-            'helpdesk', 'feedback', 'care', 'office', 'reception', 'assist', 'concierge', 'desk', 'general',
-            'postmaster', 'automation', 'autoresponder', 'donotreply', 'no_reply', 'notifications', 'alerts',
-            'system', 'mailer', 'subscription', 'subscribe', 'unsubscribe', 'payments', 'invoice', 'order',
-            'shipping', 'dispatch', 'reservations', 'bookings', 'membership', 'services', 'automated', 'bot',
-            'do-not-reply', 'do_not_reply', 'donot_reply', 'donot-reply', 'noreply', 'webinfo', 'infomail', 'suporte', 'soporte', 'contato', 'hola', 'boutique', 'bonjour', 'suport', 'regard', 'studios', 'information'
+            'info', 'contact', 'support', 'mail', 'hello', 'help', 'admin', 'noreply'
           ];
-          
-          const specialDomainTerms = ['store', 'team', 'elegance', 'shop', 'beauty', 'tech', 'studio', 'lab', 'labs'];
-          
+              
           let emailParts = email.split('@');
           let namePart = emailParts[0];
           const domainPart = emailParts[1] ? emailParts[1].split('.')[0] : '';
           
-            // NEW RULE: Strip leading numbers (and optional dots) before letters
-  // Example: "012luxora" -> "luxora", "1.13candleco" -> "candleco"
-  namePart = namePart.replace(/^[0-9.]+(?=[a-zA-Z])/, '');
-  
+          // Strip leading numbers
+          namePart = namePart.replace(/^[0-9.]+(?=[a-zA-Z])/, '');
           
           if (domainPart && nonPersonalPrefixes.includes(namePart.toLowerCase())) {
             return domainPart.charAt(0).toUpperCase() + domainPart.slice(1);
-          }
-          
-          if (!namePart.includes('.') && !namePart.includes('_') && !namePart.includes('-')) {
-            for (const prefix of nonPersonalPrefixes) {
-              if (namePart.toLowerCase().startsWith(prefix)) {
-                namePart = namePart.slice(prefix.length);
-                break;
-              }
-            }
-            
-            for (const firstName of commonFirstNames) {
-              if (namePart.toLowerCase().startsWith(firstName) && 
-                  firstName !== namePart.toLowerCase() && 
-                  firstName.length >= 3) {
-                return firstName.charAt(0).toUpperCase() + firstName.slice(1);
-              }
-            }
           }
           
           let nameParts = [];
@@ -2121,37 +2484,12 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
             nameParts = [namePart];
           }
           
-          if (nameParts.length > 0 && nonPersonalPrefixes.includes(nameParts[0].toLowerCase())) {
-            nameParts.shift();
+          if (nameParts.length > 0 && !nonPersonalPrefixes.includes(nameParts[0].toLowerCase())) {
+            const cleanPart = nameParts[0].replace(/\\\\d+$/, '');
+            return cleanPart.charAt(0).toUpperCase() + cleanPart.slice(1);
           }
           
-          if (nameParts.length > 1 && 
-              nameParts[0].length < 4 && 
-              !['hi', 'hey', 'www'].includes(nameParts[0].toLowerCase())) {
-            // Keep both parts
-          } else if (nameParts.length > 1) {
-            nameParts = [nameParts[0]];
-          }
-          
-          if (nameParts.length === 0 || nonPersonalPrefixes.includes(nameParts[0].toLowerCase())) {
-            const capitalizedDomain = domainPart.charAt(0).toUpperCase() + domainPart.slice(1);
-            return capitalizedDomain;
-          }
-          
-          let formattedName = '';
-          if (nameParts.length > 1 && specialDomainTerms.includes(nameParts[1].toLowerCase())) {
-            formattedName = nameParts.map(part => {
-              const cleanPart = part.replace(/\\d+$/, '');
-              return cleanPart.charAt(0).toUpperCase() + cleanPart.slice(1);
-            }).join(' ');
-          } else {
-            formattedName = nameParts.map(part => {
-              const cleanPart = part.replace(/\\d+$/, '');
-              return cleanPart.charAt(0).toUpperCase() + cleanPart.slice(1);
-            }).join(' ');
-          }
-          
-          return formattedName || domainPart.charAt(0).toUpperCase() + domainPart.slice(1) || 'there';
+          return domainPart.charAt(0).toUpperCase() + domainPart.slice(1) || 'there';
         }
         
         function extractCompanyFromEmail(email) {
@@ -2163,20 +2501,34 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
           return template.replace(/{name}/g, name).replace(/{company}/g, company);
         }
 
+        function isValidEmail(email) {
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}$/;
+          return emailRegex.test(email);
+        }
+
         self.onmessage = function(e) {
-          const { emails, subjectTemplate, bodyTemplate, startIndex } = e.data;
+          const { emails, subjectTemplate, bodyTemplate, startIndex, isRichText } = e.data;
           
           const results = emails.map((email, idx) => {
             const trimmedEmail = email.trim();
-            if (!trimmedEmail || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(trimmedEmail)) return null;
+            if (!trimmedEmail || !isValidEmail(trimmedEmail)) return null;
             
             const name = extractNameFromEmail(trimmedEmail);
             const company = extractCompanyFromEmail(trimmedEmail);
             const personalizedSubject = encodeURIComponent(personalizeContent(subjectTemplate, name, company));
-            const personalizedBody = encodeURIComponent(personalizeContent(bodyTemplate, name, company)).replace(/\\n/g, '%0D%0A');
+            
+            let personalizedBody;
+            if (isRichText) {
+              // For rich text, we need to handle HTML content properly
+              const personalizedHTML = personalizeContent(bodyTemplate, name, company);
+              personalizedBody = encodeURIComponent(personalizedHTML).replace(/\\\\n/g, '%0D%0A');
+            } else {
+              personalizedBody = encodeURIComponent(personalizeContent(bodyTemplate, name, company)).replace(/\\\\n/g, '%0D%0A');
+            }
+            
             return {
               email: trimmedEmail,
-              mailto: \`mailto:\${trimmedEmail}?subject=\${personalizedSubject}&body=\${personalizedBody}\`,
+              mailto: \\\`mailto:\\\${trimmedEmail}?subject=\\\${personalizedSubject}&body=\\\${personalizedBody}\\\`,
               index: startIndex + idx
             };
           }).filter(item => item !== null);
@@ -2203,7 +2555,8 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
           emails: batch,
           subjectTemplate,
           bodyTemplate,
-          startIndex: start
+          startIndex: start,
+          isRichText: isRichTextMode
         });
         
         currentBatch++;
@@ -2226,69 +2579,66 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
           }
           
           linkElement.addEventListener('click', function (event) {
-    if (event.ctrlKey || event.metaKey) {
-        event.preventDefault();
-        linkElement.classList.toggle('selected');
-        if (linkElement.classList.contains('selected')) {
-            selectedEmails.add(result.email);
-        } else {
-            selectedEmails.delete(result.email);
-        }
-        return;
-    }
-    
-    event.preventDefault();
-    
-    if (allTimeSent.has(result.email)) {
-    showAlert(`📧 Email "${result.email}" already sent!`, 'warning');
-} else {
-    linkElement.style.color = 'orange';
-    
-    allTimeSent.add(result.email);  // Add to all-time
-    recentSends.push({email: result.email, timestamp: Date.now()});  // New: Add to 24h tracker
-    
-    // Persist both
-    localStorage.setItem('allTimeSent', JSON.stringify([...allTimeSent]));
-    localStorage.setItem('recentSends', JSON.stringify(recentSends));
-    
-    // Open with pop-up detection
-const openedWindow = window.open(result.mailto, '_blank');
-if (!openedWindow || openedWindow.closed || typeof openedWindow.closed === 'undefined') {
-  // Blocked—re-prompt if not recent
-  const lastPrompt = localStorage.getItem('lastBlockedPrompt') || 0;
-  if (Date.now() - parseInt(lastPrompt) > 60000) {  // 1 min cooldown
-    showAlert(
-      '🔒 Pop-up blocked! Enable pop-ups for this site to auto-open emails.\n\n' +
-      'Tip: After allowing, you\'ll still see "Continue to Gmail" once—click it to reach compose.',
-      'warning'
-    );
-    localStorage.setItem('lastBlockedPrompt', Date.now().toString());
-  }
-} else {
-  // Success—focus the window
-  openedWindow.focus();
-}
-    
-    requestAnimationFrame(() => {
-        updateCounters();  // Existing all-time update
-        updateAnalytics();  // Existing
-        update24hDisplay();  // New: Update 24h display
-    });
-    
-    addLiveActivity(`📧 Opened email for ${result.email}`);
-    
-    if (allTimeSent.size % 50 === 0) {  // Updated to allTimeSent.size
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
-        showAlert(`🚀 Milestone! ${allTimeSent.size} emails sent!`);
-    }
-}
-    
-    applyEmailFilter();
-});
+            if (event.ctrlKey || event.metaKey) {
+              event.preventDefault();
+              linkElement.classList.toggle('selected');
+              if (linkElement.classList.contains('selected')) {
+                selectedEmails.add(result.email);
+              } else {
+                selectedEmails.delete(result.email);
+              }
+              return;
+            }
+            
+            event.preventDefault();
+            
+            if (allTimeSent.has(result.email)) {
+              showAlert(\\\`📧 Email "\\\${result.email}" already sent!\\\`, 'warning');
+            } else {
+              linkElement.style.color = 'orange';
+              
+              allTimeSent.add(result.email);
+              recentSends.push({email: result.email, timestamp: Date.now()});
+              
+              localStorage.setItem('allTimeSent', JSON.stringify([...allTimeSent]));
+              localStorage.setItem('recentSends', JSON.stringify(recentSends));
+              
+              // Open with pop-up detection
+              const openedWindow = window.open(result.mailto, '_blank');
+              if (!openedWindow || openedWindow.closed || typeof openedWindow.closed === 'undefined') {
+                const lastPrompt = localStorage.getItem('lastBlockedPrompt') || 0;
+                if (Date.now() - parseInt(lastPrompt) > 60000) {
+                  showAlert(
+                    '🔒 Pop-up blocked! Enable pop-ups for this site to auto-open emails.',
+                    'warning'
+                  );
+                  localStorage.setItem('lastBlockedPrompt', Date.now().toString());
+                }
+              } else {
+                openedWindow.focus();
+              }
+              
+              requestAnimationFrame(() => {
+                updateCounters();
+                updateAnalytics();
+                update24hDisplay();
+              });
+              
+              addLiveActivity(\\\`📧 Opened email for \\\${result.email}\\\`);
+              
+              if (allTimeSent.size % 50 === 0) {
+                confetti({
+                  particleCount: 100,
+                  spread: 70,
+                  origin: { y: 0.6 }
+                });
+                showAlert(\\\`🚀 Milestone! \\\${allTimeSent.size} emails sent!\\\`);
+              }
+            }
+            
+            applyEmailFilter();
+          });
+          
           fragment.appendChild(linkElement);
           allGeneratedEmails.push(result);
         });
@@ -2313,29 +2663,31 @@ if (!openedWindow || openedWindow.closed || typeof openedWindow.closed === 'unde
       };
       
       function finishProcessing() {
-    worker.terminate();
-    
-    submitBtn.innerHTML = originalBtnText;
-    submitBtn.disabled = false;
-    
-    endProgress();
-    
-    requestAnimationFrame(() => {
-        updateCounters();
-        updateAnalytics();
-        updateDomainStats();
-    });
-    
-    showAlert(`🚀 ${processedCount} lightning emails generated!`);
-    // Auto-scroll to generated emails
-const generatedSection = document.getElementById('mailtoLinks');
-if (generatedSection) {
-  generatedSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-    addLiveActivity(`✅ Generated ${processedCount} email links`);
-}
+        worker.terminate();
+        
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+        
+        endProgress();
+        
+        requestAnimationFrame(() => {
+          updateCounters();
+          updateAnalytics();
+          updateDomainStats();
+        });
+        
+        showAlert(\\\`🚀 \\\${processedCount} lightning emails generated!\\\`);
+        
+        // FIXED: Auto-scroll to generated emails
+        const generatedSection = document.getElementById('mailtoLinks');
+        if (generatedSection) {
+          generatedSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        addLiveActivity(\\\`✅ Generated \\\${processedCount} email links\\\`);
+      }
 
-processBatch();
+      processBatch();
     }
 
 // Smart counter updates
@@ -2354,9 +2706,9 @@ function updateCounters() {
     const progress = total > 0 ? (sent / total) * 100 : 0;
     const progressRing = document.getElementById('progressRing');
     const circumference = 2 * Math.PI * 15.9155;
-    const strokeDasharray = `${(progress / 100) * circumference} ${circumference}`;
+    const strokeDasharray = \\\`\\\${(progress / 100) * circumference} \\\${circumference}\\\`;
     progressRing.style.strokeDasharray = strokeDasharray;    
-    document.getElementById('campaignProgressText').textContent = `${Math.round(progress)}%`;
+    document.getElementById('campaignProgressText').textContent = \\\`\\\${Math.round(progress)}%\\\`;
         
    
   });
@@ -2401,10 +2753,10 @@ function update24hDisplay() {
 
   // Update DOM
   document.getElementById('24hSentCount').textContent = count;
-  document.getElementById('24hProgressBar').style.width = `${progress}%`;
+  document.getElementById('24hProgressBar').style.width = \\\`\\\${progress}%\\\`;
   document.getElementById('todayTotal').textContent = todayCount;
   document.getElementById('avgPerHour').textContent = avgPerHour;
-  document.getElementById('estCompletion').textContent = `${Math.round(estCompletion)}%`;
+  document.getElementById('estCompletion').textContent = \\\`\\\${Math.round(estCompletion)}%\\\`;
   document.getElementById('peakHour').textContent = peakHour;
 }
 
@@ -2460,10 +2812,10 @@ function updateDomainStats() {
   sortedDomains.forEach(([domain, count]) => {
     const domainElement = document.createElement('div');
     domainElement.className = 'flex items-center justify-between text-xs';
-    domainElement.innerHTML = `
-      <span class="text-gray-700 dark:text-gray-300">${domain}</span>
-      <span class="font-medium text-blue-500">${count}</span>
-    `;
+    domainElement.innerHTML = \\\`
+      <span class="text-gray-700 dark:text-gray-300">\\\${domain}</span>
+      <span class="font-medium text-blue-500">\\\${count}</span>
+    \\\`;
     fragment.appendChild(domainElement);
   });
   
@@ -2477,7 +2829,7 @@ function addLiveActivity(message) {
   const timestamp = new Date().toLocaleTimeString();
   const activity = document.createElement('div');
   activity.className = 'text-xs text-gray-600 dark:text-gray-400 animate-fadeIn';
-  activity.textContent = `[${timestamp}] ${message}`;
+  activity.textContent = \\\`[\\\${timestamp}] \\\${message}\\\`;
   
   activityFeed.insertBefore(activity, activityFeed.firstChild);
   
@@ -2574,9 +2926,9 @@ document.getElementById('csvUpload').addEventListener('change', function () {
   
   if (fileInput.files.length > 0) {
     const file = fileInput.files[0];
-    fileNameDisplay.innerHTML = `<i class="ri-file-check-line mr-2 text-green-500"></i>${file.name}`;
+    fileNameDisplay.innerHTML = \\\`<i class="ri-file-check-line mr-2 text-green-500"></i>\\\${file.name}\\\`;
   } else {
-    fileNameDisplay.innerHTML = `<i class="ri-file-line mr-2"></i>No file selected`;
+    fileNameDisplay.innerHTML = '<i class="ri-file-line mr-2"></i>No file selected';
   }
 });
 
@@ -2607,7 +2959,7 @@ document.getElementById('uploadCSV').addEventListener('click', function() {
     const contents = event.target.result;
     
     // Smart email extraction
-    const emailPattern = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+    const emailPattern = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,})/g;
     const emailList = [];
     let match;
     
@@ -2623,10 +2975,10 @@ document.getElementById('uploadCSV').addEventListener('click', function() {
     const uniqueEmails = [...new Set(emailList.map(e => e.toLowerCase()))];
     
     if (uniqueEmails.length > 0) {
-      elements.recipientsInput.value = uniqueEmails.slice(0, 20000).join('\n');
+      elements.recipientsInput.value = uniqueEmails.slice(0, 20000).join('\\\\n');
       elements.recipientsInput.dispatchEvent(new Event('input'));
-      showAlert(`🎉 Smart extraction complete! Found ${uniqueEmails.length} unique emails.`);
-      addLiveActivity(`📁 Processed file: ${uniqueEmails.length} emails extracted`);
+      showAlert(\\\`🎉 Smart extraction complete! Found \\\${uniqueEmails.length} unique emails.\\\`);
+      addLiveActivity(\\\`📁 Processed file: \\\${uniqueEmails.length} emails extracted\\\`);
     } else {
       showAlert('No valid email addresses found in the file.', 'error');
     }
@@ -2680,13 +3032,13 @@ document.getElementById('smartExtract').addEventListener('click', function() {
   this.disabled = true;
   
   setTimeout(() => {
-    const emailPattern = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+    const emailPattern = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,})/g;
     const emails = [...new Set((content.match(emailPattern) || []).map(e => e.toLowerCase()))];
     
     if (emails.length > 0) {
-      elements.recipientsInput.value = emails.join('\n');
+      elements.recipientsInput.value = emails.join('\\\\n');
       elements.recipientsInput.dispatchEvent(new Event('input'));
-      showAlert(`Smart extraction complete! Found ${emails.length} unique emails.`);
+      showAlert(\\\`Smart extraction complete! Found \\\${emails.length} unique emails.\\\`);
     } else {
       showAlert('No valid emails found in the content.', 'error');
     }
@@ -2703,7 +3055,7 @@ document.getElementById('clearRecipients').addEventListener('click', () => {
 });
 
 document.getElementById('validateEmails').addEventListener('click', function() {
-  const emails = elements.recipientsInput.value.split('\n').filter(e => e.trim());
+  const emails = elements.recipientsInput.value.split('\\\\n').filter(e => e.trim());
   if (emails.length === 0) {
     showAlert('No emails to validate.', 'warning');
     return;
@@ -2726,10 +3078,10 @@ document.getElementById('validateEmails').addEventListener('click', function() {
       }
     });
     
-    elements.recipientsInput.value = validEmails.join('\n');
+    elements.recipientsInput.value = validEmails.join('\\\\n');
     elements.recipientsInput.dispatchEvent(new Event('input'));
     
-    showAlert(`Validation complete! Kept ${valid} valid emails, removed ${invalid} invalid ones.`);
+    showAlert(\\\`Validation complete! Kept \\\${valid} valid emails, removed \\\${invalid} invalid ones.\\\`);
     this.innerHTML = '<i class="ri-shield-check-line mr-1"></i> Validate';
     this.disabled = false;
   }, 1000);
@@ -2759,7 +3111,7 @@ document.getElementById('subjectAnalyzer').addEventListener('click', function() 
     ];
     
     const randomSuggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
-    showAlert(`Subject Analysis: Score ${score}/100. Tip: ${randomSuggestion}`);
+    showAlert(\\\`Subject Analysis: Score \\\${score}/100. Tip: \\\${randomSuggestion}\\\`);
     
     this.innerHTML = '<i class="ri-search-eye-line mr-1"></i> Analyze';
     this.disabled = false;
@@ -2768,7 +3120,7 @@ document.getElementById('subjectAnalyzer').addEventListener('click', function() 
 
 document.getElementById('spamChecker').addEventListener('click', function() {
   const subject = elements.subjectInput.value.trim();
-  const body = elements.bodyInput.value.trim();
+  const body = isRichTextMode ? convertToPlainText(elements.richTextEditor.innerHTML) : elements.bodyInput.value.trim();
   
   if (!subject && !body) {
     showAlert('Please enter subject and body text first.', 'warning');
@@ -2791,9 +3143,9 @@ document.getElementById('spamChecker').addEventListener('click', function() {
 
   // Urgency & Pressure
   'urgent', 'act now', 'apply now', 'limited time', 'once in a lifetime',
-  'don’t delete', 'only today', 'expires', 'last chance', 'immediately',
+  'don\\\\'t delete', 'only today', 'expires', 'last chance', 'immediately',
   'respond now', 'time-sensitive', 'final notice', 'one time', 'while supplies last',
-  'don’t miss out', 'deadline', 'today only', 'offer ends soon',
+  'don\\\\'t miss out', 'deadline', 'today only', 'offer ends soon',
 
   // Sales & Marketing Hooks
   'buy direct', 'buy now', 'order now', 'shop now', 'get started',
@@ -2818,13 +3170,13 @@ document.getElementById('spamChecker').addEventListener('click', function() {
   'act immediately', 'avoid bankruptcy', 'be your own boss', 'big bucks',
   'call free', 'direct marketing', 'extra cash', 'get rich', 'home-based',
   'income from home', 'make $', 'multi-level marketing', 'no catch',
-  'not spam', 'this isn’t junk', 'this isn’t spam', 'work from home',
+  'not spam', 'this isn\\\\'t junk', 'this isn\\\\'t spam', 'work from home',
   'amazing', 'unlimited', 'luxury', 'opportunity', 'apply now',
   'become a member', 'increase traffic', 'earn extra cash',
 
   // Misc High-Risk
   'click below', 'click here', 'unsubscribe', 'opt in', 'remove me',
-  'winner alert', 'win big', 'don’t hesitate', 'compare rates',
+  'winner alert', 'win big', 'don\\\\'t hesitate', 'compare rates',
   'as seen on', 'bargain', 'billions', 'cards accepted',
   'cheap', 'claims', 'clearance', 'collect', 'score',
   'no strings attached', 'passwords', 'trial', 'urgent offer',
@@ -2840,7 +3192,7 @@ document.getElementById('spamChecker').addEventListener('click', function() {
     if (foundSpamWords.length === 0) {
       showAlert('Spam Check: Excellent! No spam triggers detected.', 'success');
     } else {
-      showAlert(`Spam Check: Warning! Found triggers: ${foundSpamWords.join(', ')}`, 'warning');
+      showAlert(\\\`Spam Check: Warning! Found triggers: \\\${foundSpamWords.join(', ')}\\\`, 'warning');
     }
     
     this.innerHTML = '<i class="ri-shield-line mr-1"></i> Spam Check';
@@ -2873,7 +3225,13 @@ function updateEmailPreview() {
   const name = extractNameFromEmail(previewEmail);
   const company = extractCompanyFromEmail(previewEmail);
   const subject = personalizeContent(elements.subjectInput.value, name, company);
-  const body = personalizeContent(elements.bodyInput.value, name, company);
+  let body;
+  
+  if (isRichTextMode) {
+    body = personalizeContent(elements.richTextEditor.innerHTML, name, company);
+  } else {
+    body = personalizeContent(elements.bodyInput.value, name, company);
+  }
   
   elements.previewSubject.textContent = subject || 'No subject entered';
   elements.previewBody.textContent = body || 'No message body entered';
@@ -2902,13 +3260,21 @@ elements.confirmSendTest.addEventListener('click', () => {
   const name = extractNameFromEmail(testEmail);
   const company = extractCompanyFromEmail(testEmail);
   const personalizedSubject = encodeURIComponent(personalizeContent(elements.subjectInput.value, name, company));
-  const personalizedBody = encodeURIComponent(personalizeContent(elements.bodyInput.value, name, company)).replace(/\n/g, '%0D%0A');
-  const mailto = `mailto:${testEmail}?subject=${personalizedSubject}&body=${personalizedBody}`;
+  
+  let personalizedBody;
+  if (isRichTextMode) {
+    const personalizedHTML = personalizeContent(elements.richTextEditor.innerHTML, name, company);
+    personalizedBody = encodeURIComponent(personalizedHTML).replace(/\\\\n/g, '%0D%0A');
+  } else {
+    personalizedBody = encodeURIComponent(personalizeContent(elements.bodyInput.value, name, company)).replace(/\\\\n/g, '%0D%0A');
+  }
+  
+  const mailto = \\\`mailto:\\\${testEmail}?subject=\\\${personalizedSubject}&body=\\\${personalizedBody}\\\`;
   
   window.open(mailto, '_blank');
   showAlert('Test email opened in your default email client!');
   elements.testEmailModal.classList.add('hidden');
-  addLiveActivity(`Test email sent to ${testEmail}`);
+  addLiveActivity(\\\`Test email sent to \\\${testEmail}\\\`);
 });
 
 // Theme management
@@ -3041,10 +3407,10 @@ document.getElementById('copyEmails').addEventListener('click', function() {
   });
   
   if (emails.length > 0) {
-    navigator.clipboard.writeText(emails.join('\n'))
+    navigator.clipboard.writeText(emails.join('\\\\n'))
       .then(() => {
-        showAlert(`Copied ${emails.length} email addresses to clipboard!`);
-        addLiveActivity(`Copied ${emails.length} emails to clipboard`);
+        showAlert(\\\`Copied \\\${emails.length} email addresses to clipboard!\\\`);
+        addLiveActivity(\\\`Copied \\\${emails.length} emails to clipboard\\\`);
       })
       .catch(err => {
         showAlert('Failed to copy emails. Please try again.', 'error');
@@ -3073,18 +3439,18 @@ function exportEmails(filterType) {
   
   if (emails.length > 0) {
     const timestamp = new Date().toISOString().split('T')[0];
-    const blob = new Blob([emails.join('\n')], { type: 'text/plain' });
+    const blob = new Blob([emails.join('\\\\n')], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `hbeebuzz-${filterType}-emails-${timestamp}.txt`;
+    a.download = \\\`hbeebuzz-\\\${filterType}-emails-\\\${timestamp}.txt\\\`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     
-    showAlert(`Exported ${emails.length} email addresses!`);
-    addLiveActivity(`Exported ${emails.length} ${filterType} emails`);
+    showAlert(\\\`Exported \\\${emails.length} email addresses!\\\`);
+    addLiveActivity(\\\`Exported \\\${emails.length} \\\${filterType} emails\\\`);
   } else {
     showAlert('No emails to export!', 'warning');
   }
@@ -3155,7 +3521,7 @@ elements.saveTemplate.addEventListener('click', function() {
   loadCustomTemplates();
   showAlert('Custom template saved successfully!');
   elements.templateModal.classList.add('hidden');
-  addLiveActivity(`Created custom template: ${name}`);
+  addLiveActivity(\\\`Created custom template: \\\${name}\\\`);
   
   // Clear form
   document.getElementById('templateName').value = '';
@@ -3175,12 +3541,12 @@ function loadCustomTemplates() {
     templateElement.setAttribute('data-template-subject', template.subject);
     templateElement.setAttribute('data-template-body', template.body);
     
-    templateElement.innerHTML = `
+    templateElement.innerHTML = \\\`
       <div class="flex justify-between items-start mb-2">
-        <h5 class="font-medium text-gray-800 dark:text-gray-200">${template.name}</h5>
+        <h5 class="font-medium text-gray-800 dark:text-gray-200">\\\${template.name}</h5>
         <div class="flex items-center gap-2">
-          <span class="text-xs bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 px-2 py-0.5 rounded">${template.category}</span>
-          <button class="delete-template text-red-500 hover:text-red-700 text-xs" data-template-id="${template.id}">
+          <span class="text-xs bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 px-2 py-0.5 rounded">\\\${template.category}</span>
+          <button class="delete-template text-red-500 hover:text-red-700 text-xs" data-template-id="\\\${template.id}">
             <i class="ri-delete-bin-line"></i>
           </button>
         </div>
@@ -3189,7 +3555,7 @@ function loadCustomTemplates() {
       <button class="text-xs text-blue-500 hover:text-blue-700 dark:hover:text-blue-300 flex items-center">
         <i class="ri-add-line mr-1"></i> Use Template
       </button>
-    `;
+    \\\`;
     
     elements.templatesContainer.appendChild(templateElement);
   });
@@ -3219,7 +3585,7 @@ function startProgress(taskName) {
 }
 
 function updateProgress(percent) {
-  elements.globalProgressInner.style.width = `${Math.min(percent, 100)}%`;
+  elements.globalProgressInner.style.width = \\\`\\\${Math.min(percent, 100)}%\\\`;
 }
 
 function endProgress() {
@@ -3243,13 +3609,13 @@ function showAlert(message, type = 'success') {
     icon = 'ri-alert-line';
   }
   
-  alertBox.className = `alert-box fixed top-5 right-5 left-5 ${bgColor} text-white py-3 px-4 rounded-lg shadow-lg transform transition-all opacity-0 animate-fadeIn z-50 max-w-md mx-auto`;
-  alertBox.innerHTML = `
+  alertBox.className = \\\`alert-box fixed top-5 right-5 left-5 \\\${bgColor} text-white py-3 px-4 rounded-lg shadow-lg transform transition-all opacity-0 animate-fadeIn z-50 max-w-md mx-auto\\\`;
+  alertBox.innerHTML = \\\`
     <div class="flex items-center space-x-2">
-      <i class="${icon}"></i>
-      <span>${message}</span>
+      <i class="\\\${icon}"></i>
+      <span>\\\${message}</span>
     </div>
-  `;
+  \\\`;
 
   document.body.appendChild(alertBox);
 
@@ -3274,14 +3640,14 @@ function showQuickStats() {
     const remaining = total - sent;
     const topDomain = Object.entries(domainStats).sort(([,a], [,b]) => b - a)[0];
     
-    const statsMessage = `
+    const statsMessage = \\\`
 📊 Campaign Statistics:
-• Total Emails: ${total}
-• Sent: ${sent}
-• Remaining: ${remaining}
-• Top Domain: ${topDomain ? `${topDomain[0]} (${topDomain[1]})` : 'N/A'}
-• Completion: ${total > 0 ? Math.round((sent/total)*100) : 0}%
-    `;
+• Total Emails: \\\${total}
+• Sent: \\\${sent}
+• Remaining: \\\${remaining}
+• Top Domain: \\\${topDomain ? \\\`\\\${topDomain[0]} (\\\${topDomain[1]})\\\` : 'N/A'}
+• Completion: \\\${total > 0 ? Math.round((sent/total)*100) : 0}%
+    \\\`;
     
     showAlert(statsMessage.trim(), 'info');
 }
@@ -3309,7 +3675,7 @@ function filterByDomain(domain) {
     });
 
     if (!foundAny) {
-        showAlert(`No emails found for domain: ${domain}`, 'warning');
+        showAlert(\\\`No emails found for domain: \\\${domain}\\\`, 'warning');
     }
 }
 
@@ -3354,6 +3720,11 @@ document.getElementById('reset-app')?.addEventListener('click', function() {
     elements.recipientsInput.value = '';
     elements.subjectInput.value = '';
     elements.bodyInput.value = '';
+    
+    // Reset rich text editor if active
+    if (isRichTextMode) {
+        elements.richTextEditor.innerHTML = '';
+    }
     
     // Reset counters
     document.getElementById('validEmails').textContent = '0';
@@ -3431,86 +3802,4 @@ let perfTimer = setInterval(() => {
   });
 </script>
 
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"3c444da3cd804f848f99706ed426dbf6","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-
-  <!-- HbeeBuzz Modal Root for v2 -->
-  <div id="hbeebuzzModalRoot" class="fixed inset-0 z-50 hidden items-center justify-center">
-    <div class="absolute inset-0 bg-black/40 backdrop-blur"></div>
-    <div class="relative bg-white rounded-2xl shadow-lg max-w-2xl w-full mx-4 z-10 overflow-hidden">
-      <div class="p-4 border-b flex items-center justify-between">
-        <h3 id="hbeebuzzModalTitle" class="font-semibold">Modal</h3>
-        <button id="hbeebuzzModalClose" class="text-gray-500 hover:text-gray-700"><i class="ri-close-line text-xl"></i></button>
-      </div>
-      <div id="hbeebuzzModalBody" class="p-4 text-sm text-gray-700 max-h-96 overflow-auto"></div>
-      <div class="p-4 border-t flex justify-end gap-2 bg-gray-50">
-        <button id="hbeebuzzModalCancel" class="px-4 py-2 rounded-lg border">Close</button>
-        <button id="hbeebuzzModalPrimary" class="px-4 py-2 rounded-lg bg-blue-600 text-white">OK</button>
-      </div>
-    </div>
-  </div>
-</body>
-
-</html>
-<script>
-// V2 composer logic integrated
-(function(){
-  // helpers
-  const qs = (s, el=document) => el.querySelector(s);
-  // Elements
-  const recipientsEl = qs('#recipients');
-  const subjectEl = qs('#subject');
-  const bodyText = qs('#bodyText');
-  const bodyCode = qs('#bodyCode');
-  const bodyPreview = qs('#bodyPreview');
-  const bodyValue = qs('#bodyValue');
-  const bodyCharCount = qs('#bodyCharCount');
-  const tabText = qs('#tabText');
-  const tabCode = qs('#tabCode');
-  const tabPreview = qs('#tabPreview');
-  const insertTemplate = qs('#insertTemplate');
-  const generateBtn = qs('#previewEmail') || qs('#generateBtn') || qs('#previewEmailBtn') || qs('#previewEmail');
-  const previewBtn = qs('#previewBtn');
-  const testBtn = qs('#sendTestEmail') || qs('#testBtn');
-  const sendBtn = qs('#sendBtn');
-  // Modal elements (hbeebuzz)
-  const modalRoot = qs('#hbeebuzzModalRoot');
-  const modalTitle = qs('#hbeebuzzModalTitle');
-  const modalBody = qs('#hbeebuzzModalBody');
-  const modalClose = qs('#hbeebuzzModalClose');
-  const modalCancel = qs('#hbeebuzzModalCancel');
-  const modalPrimary = qs('#hbeebuzzModalPrimary');
-  // Persistence
-  const STORAGE_KEY = 'hbeebuzz_full_v2_state_v1';
-  function saveState(){
-    const state = { recipients: recipientsEl?recipientsEl.value:'', subject: subjectEl?subjectEl.value:'', bodyText: bodyText?bodyText.value:'', bodyCode: bodyCode?bodyCode.value:'', activeMode: getActiveMode() };
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
-  }
-  function loadState(){ try{ const raw=localStorage.getItem(STORAGE_KEY); if(!raw) return; const s=JSON.parse(raw); if(recipientsEl) recipientsEl.value=s.recipients||''; if(subjectEl) subjectEl.value=s.subject||''; if(bodyText) bodyText.value=s.bodyText||''; if(bodyCode) bodyCode.value=s.bodyCode||''; setMode(s.activeMode||'text', false); updateCounts(); }catch(e){console.warn(e);} }
-  // Modal helpers
-  function openModal(title, html, primaryLabel='OK', onPrimary=null){ if(!modalRoot) return; modalTitle.textContent=title; modalBody.innerHTML=html; modalPrimary.textContent=primaryLabel; modalRoot.classList.remove('hidden'); modalPrimary.onclick=()=>{ if(onPrimary) onPrimary(); closeModal(); }; modalCancel.onclick=closeModal; modalClose.onclick=closeModal; }
-  function closeModal(){ if(!modalRoot) return; modalRoot.classList.add('hidden'); modalPrimary.onclick=null; modalCancel.onclick=null; modalClose.onclick=null; }
-  // Email helpers
-  function parseRecipients(raw){ if(!raw) return []; return raw.split(/\r?\n/).map(r=>r.trim()).filter(x=>x); }
-  function validateEmail(email){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
-  // Mode management
-  function getActiveMode(){ if(!bodyText || !bodyCode || !bodyPreview) return 'text'; if(!bodyText.classList.contains('hidden')) return 'text'; if(!bodyCode.classList.contains('hidden')) return 'code'; if(!bodyPreview.classList.contains('hidden')) return 'preview'; return 'text'; }
-  function setMode(mode, focus=true){ [tabText, tabCode, tabPreview].forEach(t=> t && t.classList.remove('bg-white','text-gray-900','shadow-sm')); if(bodyText) bodyText.classList.add('hidden'); if(bodyCode) bodyCode.classList.add('hidden'); if(bodyPreview) bodyPreview.classList.add('hidden'); if(mode==='text'){ tabText && tabText.classList.add('bg-white','text-gray-900','shadow-sm'); bodyText && bodyText.classList.remove('hidden'); if(focus) bodyText.focus(); } else if(mode==='code'){ tabCode && tabCode.classList.add('bg-white','text-gray-900','shadow-sm'); bodyCode && bodyCode.classList.remove('hidden'); if(focus) bodyCode.focus(); } else if(mode==='preview'){ tabPreview && tabPreview.classList.add('bg-white','text-gray-900','shadow-sm'); const code = bodyCode?bodyCode.value.trim():''; if(code){ bodyPreview && (bodyPreview.innerHTML = code); } else { const escaped = bodyText?bodyText.value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; bodyPreview && (bodyPreview.innerHTML = '<div style="white-space:pre-wrap;">'+escaped+'</div>'); } bodyPreview && bodyPreview.classList.remove('hidden'); } saveState(); }
-  // counts
-  function updateCounts(){ const body = getComposedBody(); bodyCharCount && (bodyCharCount.textContent = (body||'').length + ' chars'); const recs = recipientsEl?parseRecipients(recipientsEl.value):[]; const rem = qs('#remainingCounter') || qs('#remainingCounter') || qs('#remainingCounter') || qs('#remainingCounter') ; if(qs('#remainingCounter')) qs('#remainingCounter').textContent = recs.length; if(qs('#remainingCounter')) qs('#remainingCounter').textContent = recs.length; const sentEl = qs('#sentCounter') || qs('#countSent') || qs('#sentCounter'); if(sentEl) sentEl.textContent = localStorage.getItem('hbeebuzz_demo_sent')||'0'; }
-  function getComposedBody(){ if(bodyCode && bodyCode.value.trim()) return bodyCode.value; return bodyText?bodyText.value:''; }
-  // events
-  tabText && tabText.addEventListener('click', ()=> setMode('text')); tabCode && tabCode.addEventListener('click', ()=> setMode('code')); tabPreview && tabPreview.addEventListener('click', ()=> setMode('preview'));
-  [recipientsEl, subjectEl, bodyText, bodyCode].forEach(el=>{ if(el) el.addEventListener('input', ()=>{ saveState(); updateCounts(); }); });
-  qs('#clearRecipients') && qs('#clearRecipients').addEventListener('click', ()=>{ if(recipientsEl) recipientsEl.value=''; saveState(); updateCounts(); });
-  qs('#validateEmails') && qs('#validateEmails').addEventListener('click', ()=>{ const recs = parseRecipients(recipientsEl?recipientsEl.value:''); if(recs.length===0){ openModal('Validation','No recipients found.'); return; } const invalid = recs.filter(r=> !validateEmail(r)); openModal('Validation','<div><strong>Total:</strong> '+recs.length+'</div><div><strong>Invalid:</strong> '+invalid.length+'</div><div class=\"mt-2 text-xs text-gray-500\">Invalid samples: <pre>'+ (invalid.slice(0,10).join('\\n')||'None') +'</pre></div>'); });
-  insertTemplate && insertTemplate.addEventListener('click', ()=>{ const tpl = "<p>Hi {name},</p><p>I hope this finds you well. I'd love to speak about a collaboration opportunity.</p><p>Best,<br/>[Your Name]</p>"; const mode = getActiveMode(); if(mode==='code'){ bodyCode.value = (bodyCode.value||'') + "\\n" + tpl; setMode('code'); } else { bodyText.value = (bodyText.value||'') + "\\n\\n" + "Hi {name},\\n\\nI hope this finds you well. I'd love to speak about a collaboration opportunity.\\n\\nBest,\\n[Your Name]"; setMode('text'); } saveState(); updateCounts(); });
-  // actions - try multiple selectors where original file may have different ids
-  (generateBtn) && generateBtn.addEventListener('click', ()=>{ const recs = parseRecipients(recipientsEl?recipientsEl.value:''); if(recs.length===0){ openModal('Generate','No recipients to generate for.'); return; } const body = getComposedBody(); const subj = subjectEl?subjectEl.value:'(no subject)'; const sample = '<div class=\"p-2 bg-gray-50 rounded\"><strong>Subject:</strong> '+subj+'<hr/>' + '<div>' + (bodyCode && bodyCode.value.trim()? body : ('<pre style=\"white-space:pre-wrap;\">'+escapeHtml(body) +'</pre>')) + '</div></div>'; openModal('Generated '+recs.length+' emails', sample, 'OK', ()=>{}); });
-  (previewBtn) && previewBtn.addEventListener('click', ()=>{ const body = getComposedBody(); const content = '<div><strong>To:</strong> ' + (recipientsEl?parseRecipients(recipientsEl.value).slice(0,10).join(', '):'') + '</div>' + '<div class=\"mt-2\"><strong>Subject:</strong> ' + (subjectEl?escapeHtml(subjectEl.value||''):'') + '</div>' + '<hr/>' + (bodyCode && bodyCode.value.trim()? body : '<pre style=\"white-space:pre-wrap;\">'+escapeHtml(body)+'</pre>'); openModal('Preview', content, 'Close'); });
-  (testBtn) && testBtn.addEventListener('click', ()=>{ const recs = parseRecipients(recipientsEl?recipientsEl.value:''); if(recs.length===0){ openModal('Test','No recipients to test.'); return; } const body = getComposedBody(); const mailto = 'mailto:' + encodeURIComponent(recs[0]) + '?subject=' + encodeURIComponent(subjectEl?subjectEl.value||'':'') + '&body=' + encodeURIComponent(body.replace(/<\/?[^>]+(>|$)/g, '')); openModal('Test Email', '<div><strong>Test recipient:</strong> '+escapeHtml(recs[0])+'</div><div class=\"mt-2 text-xs text-gray-500\">This is a demo. You can open your mail client for the first address.</div>', 'Open Mail', ()=>{ window.location.href = mailto; }); });
-  (sendBtn) && sendBtn.addEventListener('click', ()=>{ const recs = parseRecipients(recipientsEl?recipientsEl.value:''); if(recs.length===0){ openModal('Send','No recipients to send to.'); return; } const prev = parseInt(localStorage.getItem('hbeebuzz_demo_sent')||'0',10); localStorage.setItem('hbeebuzz_demo_sent', String(prev + recs.length)); updateCounts(); openModal('Sent (Demo)','<div>Successfully <strong>queued</strong> '+recs.length+' emails in demo mode.<div class=\"mt-2 text-xs text-gray-500\">No real emails were sent.</div></div>'); });
-  function escapeHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  document.addEventListener('DOMContentLoaded', ()=>{ loadState(); updateCounts(); setMode(getActiveMode()); if(window.location.hash==='#preview') setMode('preview'); });
-  window.addEventListener('beforeunload', ()=> saveState());
-})();</script>
-</body>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c
