@@ -1960,6 +1960,24 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
       return emailRegex.test(email);
     }
 
+    // Helper function to convert HTML to plain text
+    function convertHTMLToPlainText(html) {
+      // Create a temporary div element
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      
+      // Convert to plain text while preserving line breaks
+      let text = tempDiv.textContent || tempDiv.innerText || '';
+      
+      // Preserve line breaks from <br> tags
+      text = text.replace(/<br\s*\/?>/gi, '\n');
+      
+      // Remove extra whitespace
+      text = text.replace(/\s+/g, ' ').trim();
+      
+      return text;
+    }
+
     // Lightning-fast character count
     function updateCharacterCount() {
       const subjectLength = elements.subjectInput.value.length;
@@ -2235,11 +2253,11 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
         document.getElementById('sendTestRich').addEventListener('click', function() {
           const testEmail = prompt('Enter test email address:');
           if (testEmail && isValidEmail(testEmail)) {
-            // Store rich HTML content temporarily
-            localStorage.setItem('richTestContent', html);
-            const mailto = `mailto:${testEmail}?subject=Test+Rich+Email&body=${encodeURIComponent('Check your email client for rich content preview')}`;
+            // For rich text test, we need to convert HTML to plain text for mailto
+            const plainTextBody = convertHTMLToPlainText(html);
+            const mailto = `mailto:${testEmail}?subject=Test+Rich+Email&body=${encodeURIComponent(plainTextBody)}`;
             window.open(mailto, '_blank');
-            showAlert('Test email opened! Rich content will be preserved in your email client.');
+            showAlert('Test email opened! Note: Rich formatting will appear as plain text in the email client preview.');
           }
           closePreview();
         });
@@ -2416,132 +2434,32 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
     elements.resumeAuto.addEventListener('click', resumeAutoSend);
     elements.stopAuto.addEventListener('click', stopAutoSend);
 
-    // Replace the processEmails function with this updated version
-function processEmails(recipientList, subjectTemplate, bodyTemplate) {
-  const submitBtn = elements.emailForm.querySelector('button[type="submit"]');
-  const originalBtnText = submitBtn.innerHTML;
-  submitBtn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Processing...';
-  submitBtn.disabled = true;
-  
-  startProgress('Processing emails');
-  
-  const mailtoLinksDiv = document.getElementById('generatedLinks');
-  mailtoLinksDiv.innerHTML = '';
-  allGeneratedEmails = [];
-  
-  elements.mailtoLinks.classList.remove('hidden');
-  elements.emptyState.classList.add('hidden');
-  
-  const batchSize = parseInt(document.getElementById('batchSize').value) || 50;
-  const totalEmails = recipientList.filter(r => r.trim()).length;
-  let processedCount = 0;
+    // UPDATED: Lightning-fast email processing with proper HTML handling
+    function processEmails(recipientList, subjectTemplate, bodyTemplate) {
+      const submitBtn = elements.emailForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Processing...';
+      submitBtn.disabled = true;
+      
+      startProgress('Processing emails');
+      
+      const mailtoLinksDiv = document.getElementById('generatedLinks');
+      mailtoLinksDiv.innerHTML = '';
+      allGeneratedEmails = [];
+      
+      elements.mailtoLinks.classList.remove('hidden');
+      elements.emptyState.classList.add('hidden');
+      
+      const batchSize = parseInt(document.getElementById('batchSize').value) || 50;
+      const totalEmails = recipientList.filter(r => r.trim()).length;
+      let processedCount = 0;
 
-  updateCounters();
-    
-      // Updated worker code with proper HTML handling
-  const workerCode = `
-    function extractNameFromEmail(email) {
-      // ... keep the existing name extraction logic ...
-      // (I've omitted it for brevity, but keep your existing implementation)
-      return 'there'; // placeholder
-    }
-    
-    function extractCompanyFromEmail(email) {
-      const domain = email.split('@')[1] ? email.split('@')[1].split('.')[0] : 'Company';
-      return domain.charAt(0).toUpperCase() + domain.slice(1);
-    }
+      updateCounters();
 
-    function personalizeContent(template, name, company) {
-      return template.replace(/{name}/g, name).replace(/{company}/g, company);
-    }
-
-    self.onmessage = function(e) {
-      const { emails, subjectTemplate, bodyTemplate, startIndex, isRichText } = e.data;
-      
-      const results = emails.map((email, idx) => {
-        const trimmedEmail = email.trim();
-        if (!trimmedEmail || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(trimmedEmail)) return null;
-        
-        const name = extractNameFromEmail(trimmedEmail);
-        const company = extractCompanyFromEmail(trimmedEmail);
-        const personalizedSubject = encodeURIComponent(personalizeContent(subjectTemplate, name, company));
-        
-        let personalizedBody;
-        if (isRichText) {
-          // For rich text, we need to properly encode HTML for mailto
-          const personalizedHTML = personalizeContent(bodyTemplate, name, company);
-          // Convert HTML to plain text for mailto links (most email clients don't support HTML in mailto)
-          personalizedBody = encodeURIComponent(convertHTMLToPlainText(personalizedHTML)).replace(/\\n/g, '%0D%0A');
-        } else {
-          personalizedBody = encodeURIComponent(personalizeContent(bodyTemplate, name, company)).replace(/\\n/g, '%0D%0A');
-        }
-        
-        return {
-          email: trimmedEmail,
-          mailto: \`mailto:\${trimmedEmail}?subject=\${personalizedSubject}&body=\${personalizedBody}\`,
-          index: startIndex + idx,
-          isRichText: isRichText,
-          htmlContent: isRichText ? personalizeContent(bodyTemplate, name, company) : null
-        };
-      }).filter(item => item !== null);
-      
-      self.postMessage(results);
-    }
-    
-    function convertHTMLToPlainText(html) {
-      // Create a temporary div element
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = html;
-      
-      // Convert to plain text while preserving line breaks
-      let text = tempDiv.textContent || tempDiv.innerText || '';
-      
-      // Preserve line breaks from <br> tags
-      text = text.replace(/<br\\s*\\/?>/gi, '\\n');
-      
-      // Remove extra whitespace
-      text = text.replace(/\\s+/g, ' ').trim();
-      
-      return text;
-    }
-  `;
-  
-  const worker = new Worker(URL.createObjectURL(new Blob([workerCode], {type: 'text/javascript'})));
-  
-  let currentBatch = 0;
-  
-  function processBatch() {
-    const start = currentBatch * batchSize;
-    const end = Math.min(start + batchSize, recipientList.length);
-    const batch = recipientList.slice(start, end);
-    
-    if (batch.length === 0) {
-      finishProcessing();
-      return;
-    }
-    
-    worker.postMessage({
-      emails: batch,
-      subjectTemplate,
-      bodyTemplate,
-      startIndex: start,
-      isRichText: isRichTextMode
-    });
-    
-    currentBatch++;
-  }
-  
-  worker.onmessage = function(e) {
-    const results = e.data;
-    
-    const fragment = document.createDocumentFragment();
-    
-    results.forEach(result => {
-      const linkElement = document.createElement('a');
-      linkElement.href = result.mailto;
-      linkElement.className = 'email-link text-green-500 block transition-colors';
-      linkElement.innerText = `${result.index + 1}. ${result.email}`;
-      linkElement.target = "_blank";
+      // UPDATED worker code with proper HTML handling
+      const workerCode = `
+        function extractNameFromEmail(email) {
+          if (!email || !email.includes('@')) return 'there';
           
           const commonFirstNames = [
             'john', 'jane', 'david', 'mary', 'james', 'linda', 'robert', 'michael', 'sarah', 'william', 
@@ -2661,6 +2579,23 @@ function processEmails(recipientList, subjectTemplate, bodyTemplate) {
           return template.replace(/{name}/g, name).replace(/{company}/g, company);
         }
 
+        function convertHTMLToPlainText(html) {
+          // Create a temporary div element
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = html;
+          
+          // Convert to plain text while preserving line breaks
+          let text = tempDiv.textContent || tempDiv.innerText || '';
+          
+          // Preserve line breaks from <br> tags
+          text = text.replace(/<br\\s*\\/?>/gi, '\\n');
+          
+          // Remove extra whitespace
+          text = text.replace(/\\s+/g, ' ').trim();
+          
+          return text;
+        }
+
         self.onmessage = function(e) {
           const { emails, subjectTemplate, bodyTemplate, startIndex, isRichText } = e.data;
           
@@ -2674,9 +2609,9 @@ function processEmails(recipientList, subjectTemplate, bodyTemplate) {
             
             let personalizedBody;
             if (isRichText) {
-              // For rich text, we need to handle HTML content properly
+              // For rich text, convert HTML to plain text for mailto links
               const personalizedHTML = personalizeContent(bodyTemplate, name, company);
-              personalizedBody = encodeURIComponent(personalizedHTML).replace(/\\n/g, '%0D%0A');
+              personalizedBody = encodeURIComponent(convertHTMLToPlainText(personalizedHTML)).replace(/\\n/g, '%0D%0A');
             } else {
               personalizedBody = encodeURIComponent(personalizeContent(bodyTemplate, name, company)).replace(/\\n/g, '%0D%0A');
             }
@@ -2684,7 +2619,9 @@ function processEmails(recipientList, subjectTemplate, bodyTemplate) {
             return {
               email: trimmedEmail,
               mailto: \`mailto:\${trimmedEmail}?subject=\${personalizedSubject}&body=\${personalizedBody}\`,
-              index: startIndex + idx
+              index: startIndex + idx,
+              isRichText: isRichText,
+              htmlContent: isRichText ? personalizeContent(bodyTemplate, name, company) : null
             };
           }).filter(item => item !== null);
           
@@ -2728,6 +2665,11 @@ function processEmails(recipientList, subjectTemplate, bodyTemplate) {
           linkElement.className = 'email-link text-green-500 block transition-colors';
           linkElement.innerText = `${result.index + 1}. ${result.email}`;
           linkElement.target = "_blank";
+          
+          // Store HTML content for preview if needed
+          if (result.isRichText) {
+            linkElement.dataset.htmlContent = result.htmlContent;
+          }
           
           if (allTimeSent.has(result.email)) {
             linkElement.style.color = 'orange';
@@ -3356,7 +3298,7 @@ document.getElementById('spamChecker').addEventListener('click', function() {
   }, 1000);
 });
 
-// Preview and Test functionality
+// UPDATED: Preview and Test functionality
 elements.previewEmail.addEventListener('click', () => {
   elements.previewModal.classList.remove('hidden');
 });
@@ -3369,8 +3311,7 @@ elements.previewModal.addEventListener('click', e => {
   if (e.target === elements.previewModal) elements.previewModal.classList.add('hidden');
 });
 
-elements.updatePreview.addEventListener('click', updateEmailPreview);
-
+// UPDATED: Email preview functionality
 function updateEmailPreview() {
   const previewEmail = elements.previewEmailInput.value.trim();
   if (!isValidEmail(previewEmail)) {
@@ -3384,16 +3325,20 @@ function updateEmailPreview() {
   let body;
   
   if (isRichTextMode) {
+    // For rich text preview, show the HTML content properly
     body = personalizeContent(elements.richTextEditor.innerHTML, name, company);
+    elements.previewBody.innerHTML = body; // Use innerHTML to render HTML
   } else {
     body = personalizeContent(elements.bodyInput.value, name, company);
+    elements.previewBody.textContent = body; // Use textContent for plain text
   }
   
   elements.previewSubject.textContent = subject || 'No subject entered';
-  elements.previewBody.textContent = body || 'No message body entered';
 }
 
-// Test email functionality
+elements.updatePreview.addEventListener('click', updateEmailPreview);
+
+// UPDATED: Test email functionality
 elements.sendTestEmail.addEventListener('click', () => {
   elements.testEmailModal.classList.remove('hidden');
 });
@@ -3406,6 +3351,7 @@ elements.testEmailModal.addEventListener('click', e => {
   if (e.target === elements.testEmailModal) elements.testEmailModal.classList.add('hidden');
 });
 
+// UPDATED: Test email confirmation
 elements.confirmSendTest.addEventListener('click', () => {
   const testEmail = elements.testEmailAddress.value.trim();
   if (!isValidEmail(testEmail)) {
@@ -3420,7 +3366,8 @@ elements.confirmSendTest.addEventListener('click', () => {
   let personalizedBody;
   if (isRichTextMode) {
     const personalizedHTML = personalizeContent(elements.richTextEditor.innerHTML, name, company);
-    personalizedBody = encodeURIComponent(personalizedHTML).replace(/\n/g, '%0D%0A');
+    // Convert HTML to plain text for mailto links
+    personalizedBody = encodeURIComponent(convertHTMLToPlainText(personalizedHTML)).replace(/\n/g, '%0D%0A');
   } else {
     personalizedBody = encodeURIComponent(personalizeContent(elements.bodyInput.value, name, company)).replace(/\n/g, '%0D%0A');
   }
@@ -3591,7 +3538,7 @@ function exportEmails(filterType) {
         (filterType === 'selected' && selectedEmails.has(email))) {
       emails.push(email);
     }
-  });
+  }
   
   if (emails.length > 0) {
     const timestamp = new Date().toISOString().split('T')[0];
