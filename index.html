@@ -1721,6 +1721,7 @@
  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   
     <script>
+    <script>
     // Performance-optimized JavaScript with PWA features
     document.getElementById("currentYear").textContent = new Date().getFullYear();
 
@@ -1759,29 +1760,29 @@
     });
 
     document.getElementById('dismissInstall').addEventListener('click', () => {
-     // Pop-up Consent Prompt (one-time)
-function initPopUpConsent() {
-  const hasConsented = localStorage.getItem('popUpConsent') === 'true';
-  if (!hasConsented) {
-    const consent = confirm(
-      '🚀 For auto-send to work (opens email windows), allow pop-ups for this site.\n\n' +
-      'In Chrome: Click the lock icon > Site settings > Pop-ups > Allow.\n' +
-      'It\'s safe—only opens your email client. Once done, auto-send will fly!\n\n' +
-      'Allow now? (You won\'t see this again.)'
-    );
-    localStorage.setItem('popUpConsent', consent.toString());
-    if (consent) {
-      showAlert('✅ Pop-ups enabled! Start auto-send anytime.', 'success');
-    } else {
-      showAlert('⚠️ Pop-ups blocked? Auto-send may not open windows—enable in browser settings.', 'warning');
-    }
-  }
-}
+      // Pop-up Consent Prompt (one-time)
+      function initPopUpConsent() {
+        const hasConsented = localStorage.getItem('popUpConsent') === 'true';
+        if (!hasConsented) {
+          const consent = confirm(
+            '🚀 For auto-send to work (opens email windows), allow pop-ups for this site.\n\n' +
+            'In Chrome: Click the lock icon > Site settings > Pop-ups > Allow.\n' +
+            'It\'s safe—only opens your email client. Once done, auto-send will fly!\n\n' +
+            'Allow now? (You won\'t see this again.)'
+          );
+          localStorage.setItem('popUpConsent', consent.toString());
+          if (consent) {
+            showAlert('✅ Pop-ups enabled! Start auto-send anytime.', 'success');
+          } else {
+            showAlert('⚠️ Pop-ups blocked? Auto-send may not open windows—enable in browser settings.', 'warning');
+          }
+        }
+      }
 
-// Call on load, after PWA stuff
-window.addEventListener('load', initPopUpConsent); document.getElementById('installPrompt').classList.add('hidden');
+      // Call on load, after PWA stuff
+      window.addEventListener('load', initPopUpConsent); 
+      document.getElementById('installPrompt').classList.add('hidden');
     });
-
 
     // Offline Detection
     window.addEventListener('online', () => {
@@ -1839,22 +1840,14 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
       stopAuto: document.getElementById('stopAuto'),
       quickActions: document.getElementById('quickActions'),
       toggleQuickActions: document.getElementById('toggleQuickActions'),
-      quickActionsIcon: document.getElementById('quickActionsIcon'),
-      // Rich text editor elements
-      toggleEditor: document.getElementById('toggleEditor'),
-      richTextContainer: document.getElementById('richTextContainer'),
-      plainTextContainer: document.getElementById('plainTextContainer'),
-      richTextEditor: document.getElementById('richTextEditor'),
-      editorStatus: document.getElementById('editorStatus'),
-      mobilePreviewStatus: document.getElementById('mobilePreviewStatus'),
-      previewRichText: document.getElementById('previewRichText')
+      quickActionsIcon: document.getElementById('quickActionsIcon')
     };
 
     // Global variables with performance optimization
     let allTimeSent = new Set(JSON.parse(localStorage.getItem('allTimeSent') || '[]'));
     let domainStats = {};
     let allGeneratedEmails = [];
-    let recentSends = [];
+    let recentSends = JSON.parse(localStorage.getItem('recentSends') || '[]');
     let isAutoScheduled = false;
     let autoSendInterval = null;
     let currentEmailIndex = 0;
@@ -1862,61 +1855,22 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
     let currentFilter = 'all';
     let selectedEmails = new Set();
     let lastClearedHistory = null;
-    let performanceMetrics = {
-      startTime: null,
-      emailsSent: 0,
-      averageSpeed: 0
-    };
-
-    // Rich Text Editor Variables
-    let isRichTextMode = false;
 
     // Helper functions
     function extractNameFromEmail(email) {
       if (!email || !email.includes('@')) return 'there';
       
-      const commonFirstNames = [
-        'john', 'jane', 'david', 'mary', 'james', 'linda', 'robert', 'michael', 'sarah', 'william', 
-        'patricia', 'joseph', 'jennifer', 'thomas', 'elizabeth', 'charles', 'susan', 'daniel', 'margaret',
-        'matthew', 'emma', 'anthony', 'olivia', 'mark', 'emily', 'paul', 'sophia', 'steven', 'ava', 
-        'andrew', 'isabella', 'joshua', 'mia', 'kenneth', 'charlotte', 'kevin', 'amelia', 'brian', 'harper',
-        'george', 'evelyn', 'timothy', 'anna', 'ronald', 'hannah', 'jason', 'leah', 'edward', 'scarlett',
-        'jeffrey', 'grace', 'ryan', 'lily', 'jacob', 'madison', 'gary', 'layla', 'nicholas', 'zoey',
-        'eric', 'camila', 'adam', 'abigail', 'amanda', 'riley', 'jonathan', 'zoe', 'justin', 'chloe',
-        'scott', 'penelope', 'brandon', 'hazel', 'frank', 'violet', 'benjamin', 'victoria', 'gregory',
-        'peter', 'jack', 'nathan', 'ali', 'stephen', 'dennis', 'joshua', 'tyler', 'aaron', 'henry',
-        'douglas', 'jose', 'peter', 'adam', 'zachary', 'walter', 'jerry', 'patrick', 'noah', 'amy',
-        'michelle', 'kimberly', 'deborah', 'judy', 'lisa', 'sandra', 'ashley', 'donna', 'carol',
-        'jessica', 'nancy', 'karen', 'betty', 'helen', 'dorothy', 'sharon', 'ruth', 'angela', 'melissa',
-        'diane', 'alice', 'marie', 'ann', 'catherine', 'laura', 'rebecca', 'joyce', 'rachel', 'tina',
-        'sara', 'andrea', 'nicole', 'janet', 'julia', 'sophia', 'ethan', 'mason', 'liam', 'oliver',
-        'elijah', 'logan', 'lucas', 'carter', 'isaac', 'gabriel', 'owen', 'chike', 'ayo', 'tunde',
-        'amina', 'fatima', 'kemi', 'tosin', 'adebola', 'chijioke', 'ugochi', 'khalid', 'agatha', 'lola',
-        'emma', 'janelle', 'mahatma', 'nucture', 'peace'
-      ];
-      
-      const nonPersonalPrefixes = [
-        'info', 'infos', 'contact', 'contacts', 'support', 'mail', 'hello', 'help', 'enquiries', 
-        'enquiry', 'inquiry', 'inquiries', 'store', 'sales', 'kontact', 'hi', 'official', 'service', 
-        'contacto', 'admin', 'hey', 'orders', 'customercare', 'customer', 'returns', 'shop', 'delivery', 
-        'kontakt', 'www', 'team', 'business', 'customers', 'chat', 'marketing', 'noreply', 'no-reply',
-        'newsletter', 'billing', 'account', 'careers', 'webmaster', 'media', 'press', 'hr', 'jobs',
-        'helpdesk', 'feedback', 'care', 'office', 'reception', 'assist', 'concierge', 'desk', 'general',
-        'postmaster', 'automation', 'autoresponder', 'donotreply', 'no_reply', 'notifications', 'alerts',
-        'system', 'mailer', 'subscription', 'subscribe', 'unsubscribe', 'payments', 'invoice', 'order',
-        'shipping', 'dispatch', 'reservations', 'bookings', 'membership', 'services', 'automated', 'bot',
-        'do-not-reply', 'do_not_reply', 'donot_reply', 'donot-reply', 'noreply', 'webinfo', 'infomail', 'suporte', 'soporte', 'contato', 'hola', 'boutique', 'bonjour', 'suport', 'regard', 'studios'
-      ];
+      const commonFirstNames = ['john', 'jane', 'david', 'mary', 'james', 'linda', 'robert', 'michael', 'sarah', 'william'];
+      const nonPersonalPrefixes = ['info', 'contact', 'support', 'mail', 'hello', 'help', 'admin', 'noreply'];
           
       let emailParts = email.split('@');
       let namePart = emailParts[0];
       const domainPart = emailParts[1] ? emailParts[1].split('.')[0] : '';
       
-      if (nonPersonalPrefixes.includes(namePart.toLowerCase())) {
+      if (domainPart && nonPersonalPrefixes.includes(namePart.toLowerCase())) {
         return domainPart.charAt(0).toUpperCase() + domainPart.slice(1);
       }
       
-      // Check for common patterns
       let nameParts = [];
       if (namePart.includes('.')) {
         nameParts = namePart.split('.');
@@ -1925,18 +1879,9 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
       } else if (namePart.includes('-')) {
         nameParts = namePart.split('-');
       } else {
-        // Check for common first names at the start
-        for (const firstName of commonFirstNames) {
-          if (namePart.toLowerCase().startsWith(firstName) && 
-              firstName !== namePart.toLowerCase() && 
-              firstName.length >= 3) {
-            return firstName.charAt(0).toUpperCase() + firstName.slice(1);
-          }
-        }
         nameParts = [namePart];
       }
       
-      // Clean and format name parts
       if (nameParts.length > 0 && !nonPersonalPrefixes.includes(nameParts[0].toLowerCase())) {
         const cleanPart = nameParts[0].replace(/\d+$/, '');
         return cleanPart.charAt(0).toUpperCase() + cleanPart.slice(1);
@@ -1956,7 +1901,7 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
 
     // Ultra-fast email validation
     function isValidEmail(email) {
-      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(email);
     }
 
@@ -1965,11 +1910,11 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
       const subjectLength = elements.subjectInput.value.length;
       const bodyLength = elements.bodyInput.value.length;
 
-      elements.subjectCount.innerText = `${subjectLength}/200`;
-      elements.bodyCount.innerText = `${bodyLength}/5000`;
+      elements.subjectCount.textContent = `${subjectLength}/200`;
+      elements.bodyCount.textContent = `${bodyLength}/2000`;
 
       if (subjectLength > 200) elements.subjectInput.value = elements.subjectInput.value.slice(0, 200);
-      if (bodyLength > 5000) elements.bodyInput.value = elements.bodyInput.value.slice(0, 5000);
+      if (bodyLength > 2000) elements.bodyInput.value = elements.bodyInput.value.slice(0, 2000);
     }
 
     elements.subjectInput.addEventListener('input', updateCharacterCount);
@@ -2003,20 +1948,17 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
           }
         });
 
-        document.getElementById('invalidEmails').innerText = invalidEmailsCount;
-        document.getElementById('validEmails').innerText = validEmailsCount;
-        document.getElementById('totalEmails').innerText = emails.filter(email => email.trim()).length;
-        document.getElementById('duplicateEmails').innerText = duplicateCount;
+        document.getElementById('invalidEmails').textContent = invalidEmailsCount;
+        document.getElementById('validEmails').textContent = validEmailsCount;
+        document.getElementById('totalEmails').textContent = emails.filter(email => email.trim()).length;
+        document.getElementById('duplicateEmails').textContent = duplicateCount;
         
         const validIndicator = document.getElementById('validEmailsIndicator');
         const invalidIndicator = document.getElementById('invalidEmailsIndicator');
         
         validIndicator.classList.toggle('hidden', validEmailsCount === 0);
         invalidIndicator.classList.toggle('hidden', invalidEmailsCount === 0);
-        
-        // Update domain stats preview
-        updateDomainStats();
-      }, 200);
+      }, 300);
     });
 
     // Auto-save with performance optimization
@@ -2044,12 +1986,7 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
         if (target === 'subject') {
           elements.subjectInput.value = template;
         } else if (target === 'body') {
-          if (isRichTextMode) {
-            elements.richTextEditor.innerHTML = template.replace(/&#10;/g, '<br>');
-          } else {
-            elements.bodyInput.value = template.replace(/&#10;/g, '\n');
-          }
-          updateBodyCount();
+          elements.bodyInput.value = template.replace(/&#10;/g, '\n');
         }
         updateCharacterCount();
         showAlert('Template applied successfully!');
@@ -2061,193 +1998,12 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
         const body = template.dataset.templateBody.replace(/&#10;/g, '\n');
         
         elements.subjectInput.value = subject;
-        if (isRichTextMode) {
-          elements.richTextEditor.innerHTML = body.replace(/\n/g, '<br>');
-        } else {
-          elements.bodyInput.value = body;
-        }
+        elements.bodyInput.value = body;
         updateCharacterCount();
-        updateBodyCount();
         
         showAlert('AI-enhanced template applied!');
       }
     });
-
-    // Rich Text Editor Functionality
-    function initRichTextEditor() {
-      // Toggle between rich text and plain text
-      elements.toggleEditor.addEventListener('click', function() {
-        isRichTextMode = !isRichTextMode;
-        
-        if (isRichTextMode) {
-          // Switch to rich text mode
-          elements.richTextContainer.classList.remove('hidden');
-          elements.plainTextContainer.classList.add('hidden');
-          elements.editorStatus.innerHTML = '<i class="ri-code-s-slash-line"></i> Rich Text Mode';
-          elements.toggleEditor.innerHTML = '<i class="ri-text-wrap"></i> Switch to Plain Text';
-          
-          // Sync content from textarea to rich editor
-          elements.richTextEditor.innerHTML = convertToHTML(elements.bodyInput.value);
-          updateBodyCount();
-        } else {
-          // Switch to plain text mode
-          elements.richTextContainer.classList.add('hidden');
-          elements.plainTextContainer.classList.remove('hidden');
-          elements.editorStatus.innerHTML = '<i class="ri-text-wrap"></i> Plain Text Mode';
-          elements.toggleEditor.innerHTML = '<i class="ri-code-s-slash-line"></i> Switch to Rich Text';
-          
-          // Sync content from rich editor to textarea
-          elements.bodyInput.value = convertToPlainText(elements.richTextEditor.innerHTML);
-          updateBodyCount();
-        }
-      });
-
-      // Rich text toolbar functionality
-      document.querySelectorAll('#richTextContainer [data-command]').forEach(button => {
-        button.addEventListener('click', function() {
-          const command = this.dataset.command;
-          const value = this.dataset.value;
-          
-          document.execCommand(command, false, value);
-          elements.richTextEditor.focus();
-          updateBodyCount();
-          checkMobileOptimization();
-        });
-      });
-
-      // HTML insertion
-      document.getElementById('insertHTML').addEventListener('click', function() {
-        const htmlCode = prompt('Enter HTML code:');
-        if (htmlCode) {
-          document.execCommand('insertHTML', false, htmlCode);
-          updateBodyCount();
-          checkMobileOptimization();
-        }
-      });
-
-      // Link creation
-      document.querySelector('[data-command="createLink"]').addEventListener('click', function() {
-        const url = prompt('Enter URL:');
-        if (url) {
-          document.execCommand('createLink', false, url);
-        }
-      });
-
-      // Rich text preview
-      elements.previewRichText.addEventListener('click', function() {
-        showRichTextPreview(elements.richTextEditor.innerHTML);
-      });
-
-      // Update character count for rich text
-      elements.richTextEditor.addEventListener('input', function() {
-        updateBodyCount();
-        checkMobileOptimization();
-        
-        // Auto-save to textarea for form submission
-        elements.bodyInput.value = convertToPlainText(this.innerHTML);
-      });
-
-      // Check for mobile optimization
-      function checkMobileOptimization() {
-        const content = elements.richTextEditor.innerHTML;
-        const hasLargeImages = content.includes('width=') || content.includes('height=');
-        const hasFixedWidthTables = content.includes('width:') || content.includes('width=');
-        const hasComplexLayouts = content.includes('float:') || content.includes('position:');
-        
-        if (hasLargeImages || hasFixedWidthTables || hasComplexLayouts) {
-          elements.mobilePreviewStatus.classList.remove('hidden');
-          elements.mobilePreviewStatus.innerHTML = '<i class="ri-smartphone-line"></i> Check Mobile Layout';
-          elements.mobilePreviewStatus.className = elements.mobilePreviewStatus.className.replace('text-green-600', 'text-yellow-600');
-        } else {
-          elements.mobilePreviewStatus.classList.remove('hidden');
-          elements.mobilePreviewStatus.innerHTML = '<i class="ri-smartphone-line"></i> Mobile Optimized';
-          elements.mobilePreviewStatus.className = elements.mobilePreviewStatus.className.replace('text-yellow-600', 'text-green-600');
-        }
-      }
-
-      // Enhanced character count for rich text
-      function updateBodyCount() {
-        let content = '';
-        if (isRichTextMode) {
-          content = convertToPlainText(elements.richTextEditor.innerHTML);
-        } else {
-          content = elements.bodyInput.value;
-        }
-        
-        const length = content.length;
-        elements.bodyCount.innerText = `${length}/5000`;
-        
-        if (length > 5000) {
-          elements.bodyCount.classList.add('text-red-500');
-        } else {
-          elements.bodyCount.classList.remove('text-red-500');
-        }
-      }
-
-      // Convert HTML to plain text for counting
-      function convertToPlainText(html) {
-        const temp = document.createElement('div');
-        temp.innerHTML = html;
-        return temp.textContent || temp.innerText || '';
-      }
-
-      // Convert plain text to basic HTML
-      function convertToHTML(text) {
-        return text
-          .replace(/\n/g, '<br>')
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.*?)\*/g, '<em>$1</em>')
-          .replace(/_(.*?)_/g, '<u>$1</u>');
-      }
-
-      // Show rich text preview
-      function showRichTextPreview(html) {
-        const previewModal = document.createElement('div');
-        previewModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-        previewModal.innerHTML = `
-          <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl mx-4 max-h-[80vh] overflow-hidden">
-            <div class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
-              <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Rich Text Email Preview</h3>
-              <button class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" id="closeRichPreview">
-                <i class="ri-close-line text-xl"></i>
-              </button>
-            </div>
-            <div class="p-6 overflow-y-auto max-h-[60vh]">
-              <div class="rich-text-preview bg-white dark:bg-gray-900 p-4 rounded border">
-                ${html || '<p class="text-gray-500">No content to preview</p>'}
-              </div>
-            </div>
-            <div class="flex gap-3 p-4 border-t border-gray-200 dark:border-gray-700">
-              <button class="gmail-btn-secondary flex-1 py-2 rounded-lg" id="closeRichPreviewBtn">Close</button>
-              <button class="gmail-btn flex-1 py-2 rounded-lg" id="sendTestRich">Send Test</button>
-            </div>
-          </div>
-        `;
-        
-        document.body.appendChild(previewModal);
-        
-        // Close preview
-        const closePreview = () => previewModal.remove();
-        document.getElementById('closeRichPreview').addEventListener('click', closePreview);
-        document.getElementById('closeRichPreviewBtn').addEventListener('click', closePreview);
-        
-        // Send test with rich content
-        document.getElementById('sendTestRich').addEventListener('click', function() {
-          const testEmail = prompt('Enter test email address:');
-          if (testEmail && isValidEmail(testEmail)) {
-            // Store rich HTML content temporarily
-            localStorage.setItem('richTestContent', html);
-            const mailto = `mailto:${testEmail}?subject=Test+Rich+Email&body=${encodeURIComponent('Check your email client for rich content preview')}`;
-            window.open(mailto, '_blank');
-            showAlert('Test email opened! Rich content will be preserved in your email client.');
-          }
-          closePreview();
-        });
-      }
-    }
-
-    // Initialize rich text editor
-    initRichTextEditor();
 
     // Smart scheduling functionality
     elements.scheduleToggle.addEventListener('change', function() {
@@ -2315,12 +2071,7 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
 
       const recipients = elements.recipientsInput.value.split('\n').filter(r => r.trim());
       const subjectTemplate = elements.subjectInput.value;
-      let bodyTemplate = elements.bodyInput.value;
-      
-      // Use rich text content if in rich text mode
-      if (isRichTextMode) {
-        bodyTemplate = elements.richTextEditor.innerHTML;
-      }
+      const bodyTemplate = elements.bodyInput.value;
       
       if (recipients.length === 0) {
         showAlert('Please add at least one recipient email.', 'error');
@@ -2354,7 +2105,6 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
       
       isAutoScheduled = true;
       currentEmailIndex = 0;
-      performanceMetrics.startTime = Date.now();
       
       // Show control buttons
       elements.pauseAuto.classList.remove('hidden');
@@ -2443,228 +2193,139 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
       elements.mailtoLinks.classList.remove('hidden');
       elements.emptyState.classList.add('hidden');
       
-      const batchSize = parseInt(document.getElementById('batchSize').value) || 50;
-      const totalEmails = recipientList.filter(r => r.trim()).length;
+      const totalEmails = recipientList.length;
       let processedCount = 0;
 
       updateCounters();
 
-      // FIXED: Optimized worker code with proper email validation
-      const workerCode = `
-        function extractNameFromEmail(email) {
-          if (!email || !email.includes('@')) return 'there';
-          
-          const commonFirstNames = [
-            'john', 'jane', 'david', 'mary', 'james', 'linda', 'robert', 'michael', 'sarah', 'william'
-          ];
-          
-          const nonPersonalPrefixes = [
-            'info', 'contact', 'support', 'mail', 'hello', 'help', 'admin', 'noreply'
-          ];
-              
-          let emailParts = email.split('@');
-          let namePart = emailParts[0];
-          const domainPart = emailParts[1] ? emailParts[1].split('.')[0] : '';
-          
-          // Strip leading numbers
-          namePart = namePart.replace(/^[0-9.]+(?=[a-zA-Z])/, '');
-          
-          if (domainPart && nonPersonalPrefixes.includes(namePart.toLowerCase())) {
-            return domainPart.charAt(0).toUpperCase() + domainPart.slice(1);
-          }
-          
-          let nameParts = [];
-          if (namePart.includes('.')) {
-            nameParts = namePart.split('.');
-          } else if (namePart.includes('_')) {
-            nameParts = namePart.split('_');
-          } else if (namePart.includes('-')) {
-            nameParts = namePart.split('-');
-          } else {
-            nameParts = [namePart];
-          }
-          
-          if (nameParts.length > 0 && !nonPersonalPrefixes.includes(nameParts[0].toLowerCase())) {
-            const cleanPart = nameParts[0].replace(/\\\\d+$/, '');
-            return cleanPart.charAt(0).toUpperCase() + cleanPart.slice(1);
-          }
-          
-          return domainPart.charAt(0).toUpperCase() + domainPart.slice(1) || 'there';
-        }
-        
-        function extractCompanyFromEmail(email) {
-          const domain = email.split('@')[1] ? email.split('@')[1].split('.')[0] : 'Company';
-          return domain.charAt(0).toUpperCase() + domain.slice(1);
-        }
+      // Process emails directly without web worker for better compatibility
+      function processBatch() {
+        const batchSize = 50;
+        const totalBatches = Math.ceil(recipientList.length / batchSize);
+        let currentBatch = 0;
 
-        function personalizeContent(template, name, company) {
-          return template.replace(/{name}/g, name).replace(/{company}/g, company);
-        }
+        function processNextBatch() {
+          if (currentBatch >= totalBatches) {
+            finishProcessing();
+            return;
+          }
 
-        function isValidEmail(email) {
-          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}$/;
-          return emailRegex.test(email);
-        }
+          const start = currentBatch * batchSize;
+          const end = Math.min(start + batchSize, recipientList.length);
+          const batch = recipientList.slice(start, end);
 
-        self.onmessage = function(e) {
-          const { emails, subjectTemplate, bodyTemplate, startIndex, isRichText } = e.data;
+          const fragment = document.createDocumentFragment();
           
-          const results = emails.map((email, idx) => {
+          batch.forEach((email, idx) => {
             const trimmedEmail = email.trim();
-            if (!trimmedEmail || !isValidEmail(trimmedEmail)) return null;
+            if (!trimmedEmail || !isValidEmail(trimmedEmail)) return;
             
             const name = extractNameFromEmail(trimmedEmail);
             const company = extractCompanyFromEmail(trimmedEmail);
             const personalizedSubject = encodeURIComponent(personalizeContent(subjectTemplate, name, company));
+            const personalizedBody = encodeURIComponent(personalizeContent(bodyTemplate, name, company)).replace(/\n/g, '%0D%0A');
             
-            let personalizedBody;
-            if (isRichText) {
-              // For rich text, we need to handle HTML content properly
-              const personalizedHTML = personalizeContent(bodyTemplate, name, company);
-              personalizedBody = encodeURIComponent(personalizedHTML).replace(/\\\\n/g, '%0D%0A');
-            } else {
-              personalizedBody = encodeURIComponent(personalizeContent(bodyTemplate, name, company)).replace(/\\\\n/g, '%0D%0A');
-            }
-            
-            return {
+            const result = {
               email: trimmedEmail,
-              mailto: \\\`mailto:\\\${trimmedEmail}?subject=\\\${personalizedSubject}&body=\\\${personalizedBody}\\\`,
-              index: startIndex + idx
+              mailto: `mailto:${trimmedEmail}?subject=${personalizedSubject}&body=${personalizedBody}`,
+              index: start + idx
             };
-          }).filter(item => item !== null);
-          
-          self.postMessage(results);
-        }
-      `;
-      
-      const worker = new Worker(URL.createObjectURL(new Blob([workerCode], {type: 'text/javascript'})));
-      
-      let currentBatch = 0;
-      
-      function processBatch() {
-        const start = currentBatch * batchSize;
-        const end = Math.min(start + batchSize, recipientList.length);
-        const batch = recipientList.slice(start, end);
-        
-        if (batch.length === 0) {
-          finishProcessing();
-          return;
-        }
-        
-        worker.postMessage({
-          emails: batch,
-          subjectTemplate,
-          bodyTemplate,
-          startIndex: start,
-          isRichText: isRichTextMode
-        });
-        
-        currentBatch++;
-      }
-      
-      worker.onmessage = function(e) {
-        const results = e.data;
-        
-        const fragment = document.createDocumentFragment();
-        
-        results.forEach(result => {
-          const linkElement = document.createElement('a');
-          linkElement.href = result.mailto;
-          linkElement.className = 'email-link text-green-500 block transition-colors';
-          linkElement.innerText = `${result.index + 1}. ${result.email}`;
-          linkElement.target = "_blank";
-          
-          if (allTimeSent.has(result.email)) {
-            linkElement.style.color = 'orange';
-          }
-          
-          linkElement.addEventListener('click', function (event) {
-            if (event.ctrlKey || event.metaKey) {
-              event.preventDefault();
-              linkElement.classList.toggle('selected');
-              if (linkElement.classList.contains('selected')) {
-                selectedEmails.add(result.email);
-              } else {
-                selectedEmails.delete(result.email);
-              }
-              return;
-            }
-            
-            event.preventDefault();
+
+            const linkElement = document.createElement('a');
+            linkElement.href = result.mailto;
+            linkElement.className = 'email-link text-green-500 block transition-colors';
+            linkElement.textContent = `${result.index + 1}. ${result.email}`;
+            linkElement.target = "_blank";
             
             if (allTimeSent.has(result.email)) {
-              showAlert(\\\`📧 Email "\\\${result.email}" already sent!\\\`, 'warning');
-            } else {
               linkElement.style.color = 'orange';
-              
-              allTimeSent.add(result.email);
-              recentSends.push({email: result.email, timestamp: Date.now()});
-              
-              localStorage.setItem('allTimeSent', JSON.stringify([...allTimeSent]));
-              localStorage.setItem('recentSends', JSON.stringify(recentSends));
-              
-              // Open with pop-up detection
-              const openedWindow = window.open(result.mailto, '_blank');
-              if (!openedWindow || openedWindow.closed || typeof openedWindow.closed === 'undefined') {
-                const lastPrompt = localStorage.getItem('lastBlockedPrompt') || 0;
-                if (Date.now() - parseInt(lastPrompt) > 60000) {
-                  showAlert(
-                    '🔒 Pop-up blocked! Enable pop-ups for this site to auto-open emails.',
-                    'warning'
-                  );
-                  localStorage.setItem('lastBlockedPrompt', Date.now().toString());
-                }
-              } else {
-                openedWindow.focus();
-              }
-              
-              requestAnimationFrame(() => {
-                updateCounters();
-                updateAnalytics();
-                update24hDisplay();
-              });
-              
-              addLiveActivity(\\\`📧 Opened email for \\\${result.email}\\\`);
-              
-              if (allTimeSent.size % 50 === 0) {
-                confetti({
-                  particleCount: 100,
-                  spread: 70,
-                  origin: { y: 0.6 }
-                });
-                showAlert(\\\`🚀 Milestone! \\\${allTimeSent.size} emails sent!\\\`);
-              }
             }
             
-            applyEmailFilter();
+            linkElement.addEventListener('click', function (event) {
+              if (event.ctrlKey || event.metaKey) {
+                event.preventDefault();
+                linkElement.classList.toggle('selected');
+                if (linkElement.classList.contains('selected')) {
+                  selectedEmails.add(result.email);
+                } else {
+                  selectedEmails.delete(result.email);
+                }
+                return;
+              }
+              
+              event.preventDefault();
+              
+              if (allTimeSent.has(result.email)) {
+                showAlert(`📧 Email "${result.email}" already sent!`, 'warning');
+              } else {
+                linkElement.style.color = 'orange';
+                
+                allTimeSent.add(result.email);
+                recentSends.push({email: result.email, timestamp: Date.now()});
+                
+                localStorage.setItem('allTimeSent', JSON.stringify([...allTimeSent]));
+                localStorage.setItem('recentSends', JSON.stringify(recentSends));
+                
+                // Open with pop-up detection
+                const openedWindow = window.open(result.mailto, '_blank');
+                if (!openedWindow || openedWindow.closed || typeof openedWindow.closed === 'undefined') {
+                  const lastPrompt = localStorage.getItem('lastBlockedPrompt') || 0;
+                  if (Date.now() - parseInt(lastPrompt) > 60000) {
+                    showAlert(
+                      '🔒 Pop-up blocked! Enable pop-ups for this site to auto-open emails.',
+                      'warning'
+                    );
+                    localStorage.setItem('lastBlockedPrompt', Date.now().toString());
+                  }
+                } else {
+                  openedWindow.focus();
+                }
+                
+                requestAnimationFrame(() => {
+                  updateCounters();
+                  updateAnalytics();
+                  update24hDisplay();
+                });
+                
+                addLiveActivity(`📧 Opened email for ${result.email}`);
+                
+                if (allTimeSent.size % 50 === 0) {
+                  confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                  });
+                  showAlert(`🚀 Milestone! ${allTimeSent.size} emails sent!`);
+                }
+              }
+              
+              applyEmailFilter();
+            });
+            
+            fragment.appendChild(linkElement);
+            allGeneratedEmails.push(result);
+            
+            // Update domain stats
+            const domain = result.email.split('@')[1];
+            domainStats[domain] = (domainStats[domain] || 0) + 1;
           });
           
-          fragment.appendChild(linkElement);
-          allGeneratedEmails.push(result);
-        });
-        
-        mailtoLinksDiv.appendChild(fragment);
-        
-        // Update domain stats
-        results.forEach(result => {
-          const domain = result.email.split('@')[1];
-          domainStats[domain] = (domainStats[domain] || 0) + 1;
-        });
-        
-        processedCount += results.length;
-        const progressPercent = Math.min((processedCount / totalEmails) * 100, 100);
-        updateProgress(progressPercent);
-        
-        if (currentBatch * batchSize < recipientList.length) {
-          requestAnimationFrame(processBatch);
-        } else {
-          finishProcessing();
+          mailtoLinksDiv.appendChild(fragment);
+          
+          processedCount += batch.length;
+          const progressPercent = Math.min((processedCount / totalEmails) * 100, 100);
+          updateProgress(progressPercent);
+          
+          currentBatch++;
+          
+          // Use setTimeout to avoid blocking the UI
+          setTimeout(processNextBatch, 0);
         }
-      };
+        
+        processNextBatch();
+      }
       
       function finishProcessing() {
-        worker.terminate();
-        
         submitBtn.innerHTML = originalBtnText;
         submitBtn.disabled = false;
         
@@ -2676,333 +2337,320 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
           updateDomainStats();
         });
         
-        showAlert(\\\`🚀 \\\${processedCount} lightning emails generated!\\\`);
+        showAlert(`🚀 ${processedCount} lightning emails generated!`);
         
-        // FIXED: Auto-scroll to generated emails
+        // Auto-scroll to generated emails
         const generatedSection = document.getElementById('mailtoLinks');
         if (generatedSection) {
           generatedSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
-        addLiveActivity(\\\`✅ Generated \\\${processedCount} email links\\\`);
+        addLiveActivity(`✅ Generated ${processedCount} email links`);
       }
 
       processBatch();
     }
 
-// Smart counter updates
-function updateCounters() {
-  const total = allGeneratedEmails.length;
-  const sent = allTimeSent.size;
-  const remaining = total - sent;
-  
-  requestAnimationFrame(() => {
-    document.getElementById('totalCounter').textContent = total;
-    document.getElementById('sentCounter').textContent = sent;
-    document.getElementById('remainingCounter').textContent = remaining;
-    document.getElementById('headerSentCount').textContent = sent;
-       update24hDisplay();  document.getElementById('headerRemainingCount').textContent = remaining;
-    
-    const progress = total > 0 ? (sent / total) * 100 : 0;
-    const progressRing = document.getElementById('progressRing');
-    const circumference = 2 * Math.PI * 15.9155;
-    const strokeDasharray = \\\`\\\${(progress / 100) * circumference} \\\${circumference}\\\`;
-    progressRing.style.strokeDasharray = strokeDasharray;    
-    document.getElementById('campaignProgressText').textContent = \\\`\\\${Math.round(progress)}%\\\`;
-        
-   
-  });
-}
-
-
-// New: Get 24h count (unique emails first-sent in last 24h)
-function get24hCount() {
-  const now = Date.now();
-  const twentyFourHoursAgo = now - 86400000;  // 24h in ms
-  return recentSends.filter(item => item.timestamp > twentyFourHoursAgo).length;
-}
-
-// New: Get today-only count (midnight to now, for summary)
-function getTodayCount() {
-  const now = new Date();
-  const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  return recentSends.filter(item => item.timestamp >= todayMidnight).length;
-}
-
-
-// New: Update 24h display (real-time)
-function update24hDisplay() {
-  const count = get24hCount();
-  const todayCount = getTodayCount();
-  const totalRecent = recentSends.length;  // All recent (but filtered on load)
-  const progress = totalRecent > 0 ? Math.min((count / totalRecent) * 100, 100) : 0;
-  const hoursElapsed = 24;  // Fixed for 24h window
-  const avgPerHour = todayCount > 0 ? Math.round(todayCount / (new Date().getHours() + 1)) : 0;
-  const estCompletion = Math.min((count / 500) * 100, 100);  // Assume 500/day goal; customize
-
-  // Compute peak hour properly
-  let peakHour = 'N/A';
-  if (recentSends.length > 0) {
-    const hourCount = {};
-    recentSends.forEach(item => {
-      const hour = new Date(item.timestamp).getHours();
-      hourCount[hour] = (hourCount[hour] || 0) + 1;
-    });
-    peakHour = Object.entries(hourCount).reduce((max, [hour, cnt]) => cnt > max[1] ? [hour, cnt] : max, [0, 0])[0];
-  }
-
-  // Update DOM
-  document.getElementById('24hSentCount').textContent = count;
-  document.getElementById('24hProgressBar').style.width = \\\`\\\${progress}%\\\`;
-  document.getElementById('todayTotal').textContent = todayCount;
-  document.getElementById('avgPerHour').textContent = avgPerHour;
-  document.getElementById('estCompletion').textContent = \\\`\\\${Math.round(estCompletion)}%\\\`;
-  document.getElementById('peakHour').textContent = peakHour;
-}
-
-
-// New: Toggle summary panel
-document.getElementById('toggleSummary').addEventListener('click', function() {
-  const panel = document.getElementById('summaryPanel');
-  panel.classList.toggle('hidden');
-  panel.classList.toggle('show');
-  this.innerHTML = panel.classList.contains('show') ? 
-    '<i class="ri-eye-off-line"></i> Hide Summary' : 
-    '<i class="ri-eye-line"></i> View Summary';
-});
-
-// New: Manual reset for testing (auto-resets on load anyway)
-document.getElementById('resetTracker').addEventListener('click', function() {
-  if (confirm('Reset 24h tracker? (For testing only)')) {
-    recentSends = [];
-    localStorage.setItem('recentSends', '[]');
-    update24hDisplay();
-    showAlert('24h tracker reset!', 'warning');
-  }
-});
-
-
-
-// Smart analytics
-function updateAnalytics() {
-  const total = allGeneratedEmails.length;
-  const sent = allTimeSent.size;
-  
-  if (total > 0) {
-    const sentPercent = (sent / total) * 100;
-    const grade = sentPercent >= 80 ? 'A+' : sentPercent >= 60 ? 'A' : sentPercent >= 40 ? 'B+' : sentPercent >= 20 ? 'B' : 'C';
-    document.getElementById('perfScore').textContent = grade;
-  }
-}
-
-// Smart domain stats
-function updateDomainStats() {
-  const domainStatsContainer = document.getElementById('domainStats');
-  
-  const sortedDomains = Object.entries(domainStats)
-    .sort(([,a], [,b]) => b - a)
-    .slice(0, 5);
-  
-  if (sortedDomains.length === 0) {
-    domainStatsContainer.innerHTML = '<div class="flex items-center justify-between text-xs"><span class="text-gray-600 dark:text-gray-400">No data available</span></div>';
-    return;
-  }
-  
-  const fragment = document.createDocumentFragment();
-  sortedDomains.forEach(([domain, count]) => {
-    const domainElement = document.createElement('div');
-    domainElement.className = 'flex items-center justify-between text-xs';
-    domainElement.innerHTML = \\\`
-      <span class="text-gray-700 dark:text-gray-300">\\\${domain}</span>
-      <span class="font-medium text-blue-500">\\\${count}</span>
-    \\\`;
-    fragment.appendChild(domainElement);
-  });
-  
-  domainStatsContainer.innerHTML = '';
-  domainStatsContainer.appendChild(fragment);
-}
-
-// Live activity feed
-function addLiveActivity(message) {
-  const activityFeed = document.getElementById('liveActivity');
-  const timestamp = new Date().toLocaleTimeString();
-  const activity = document.createElement('div');
-  activity.className = 'text-xs text-gray-600 dark:text-gray-400 animate-fadeIn';
-  activity.textContent = \\\`[\\\${timestamp}] \\\${message}\\\`;
-  
-  activityFeed.insertBefore(activity, activityFeed.firstChild);
-  
-  // Keep only last 10 activities
-  while (activityFeed.children.length > 10) {
-    activityFeed.removeChild(activityFeed.lastChild);
-  }
-  
-  activityFeed.scrollTop = 0;
-}
-
-// Global search with AI commands
-const performGlobalSearch = debounce(function (query) {
-  const lowerQuery = query.toLowerCase();
-  
-  // Handle AI commands
-  if (lowerQuery.startsWith('find:')) {
-    const domain = lowerQuery.replace('find:', '').trim();
-    filterByDomain(domain);
-    return;
-  }
-  
-  if (lowerQuery.startsWith('sort:')) {
-    const sortType = lowerQuery.replace('sort:', '').trim();
-    sortEmails(sortType);
-    return;
-  }
-  
-  if (lowerQuery.startsWith('filter:')) {
-    const filterType = lowerQuery.replace('filter:', '').trim();
-    if (filterType === 'unsent') setActiveFilter('pending');
-    else if (filterType === 'sent') setActiveFilter('sent');
-    return;
-  }
-  
-  // Regular search
-  const emailLinks = document.querySelectorAll('#generatedLinks a');
-  let foundAny = false;
-
-  emailLinks.forEach(link => {
-    const text = link.innerText.toLowerCase();
-    const match = text.includes(lowerQuery);
-    foundAny = foundAny || match;
-    
-    const email = link.textContent.split('. ')[1];
-    const isSent = allTimeSent.has(email);
-    
-    let shouldShow = match;
-    if (currentFilter === 'sent' && !isSent) shouldShow = false;
-    if (currentFilter === 'pending' && isSent) shouldShow = false;
-    
-    link.style.display = shouldShow ? 'block' : 'none';
-    link.style.backgroundColor = match && lowerQuery ? 'rgba(74, 222, 128, 0.1)' : '';
-  });
-}, 150);
-
-function debounce(func, delay) {
-  let timeout;
-  return function (...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), delay);
-  };
-}
-
-elements.globalEmailSearch.addEventListener('input', function () {
-  performGlobalSearch(this.value);
-});
-
-// Search suggestions
-elements.globalEmailSearch.addEventListener('focus', function() {
-  document.getElementById('searchSuggestions').classList.remove('hidden');
-});
-
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('#globalEmailSearch') && !e.target.closest('#searchSuggestions')) {
-    document.getElementById('searchSuggestions').classList.add('hidden');
-  }
-});
-
-// AI command handling
-document.addEventListener('click', function(e) {
-  if (e.target.closest('[data-command]')) {
-    const command = e.target.closest('[data-command]').dataset.command;
-    elements.globalEmailSearch.value = command;
-    performGlobalSearch(command);
-    document.getElementById('searchSuggestions').classList.add('hidden');
-  }
-});
-
-// Smart file upload
-document.getElementById('csvUpload').addEventListener('change', function () {
-  const fileInput = this;
-  const fileNameDisplay = document.getElementById('fileName');
-  
-  if (fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    fileNameDisplay.innerHTML = \\\`<i class="ri-file-check-line mr-2 text-green-500"></i>\\\${file.name}\\\`;
-  } else {
-    fileNameDisplay.innerHTML = '<i class="ri-file-line mr-2"></i>No file selected';
-  }
-});
-
-document.getElementById('uploadCSV').addEventListener('click', function() {
-  const fileInput = document.getElementById('csvUpload');
-  const file = fileInput.files[0];
-  
-  if (!file) {
-    showAlert('Please select a file to upload.', 'error');
-    return;
-  }
-  
-  const fileExtension = file.name.split('.').pop().toLowerCase();
-  if (!['csv', 'txt', 'xlsx', 'xls'].includes(fileExtension)) {
-    showAlert('Please upload a valid CSV, TXT, or Excel file.', 'error');
-    return;
-  }
-  
-  const uploadBtn = this;
-  const originalBtnText = uploadBtn.innerHTML;
-  uploadBtn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Smart Processing...';
-  uploadBtn.disabled = true;
-  
-  startProgress('Smart file processing');
-  
-  const reader = new FileReader();
-  reader.onload = function(event) {
-    const contents = event.target.result;
-    
-    // Smart email extraction
-    const emailPattern = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,})/g;
-    const emailList = [];
-    let match;
-    
-    while ((match = emailPattern.exec(contents)) !== null) {
-      emailList.push(match[0]);
+    // Smart counter updates
+    function updateCounters() {
+      const total = allGeneratedEmails.length;
+      const sent = allTimeSent.size;
+      const remaining = total - sent;
       
-      if (emailList.length % 1000 === 0) {
-        updateProgress((emailList.length / 20000) * 100);
+      requestAnimationFrame(() => {
+        document.getElementById('totalCounter').textContent = total;
+        document.getElementById('sentCounter').textContent = sent;
+        document.getElementById('remainingCounter').textContent = remaining;
+        document.getElementById('headerSentCount').textContent = sent;
+        document.getElementById('headerRemainingCount').textContent = remaining;
+        
+        const progress = total > 0 ? (sent / total) * 100 : 0;
+        const progressRing = document.getElementById('progressRing');
+        const circumference = 2 * Math.PI * 15.9155;
+        const strokeDasharray = `${(progress / 100) * circumference} ${circumference}`;
+        progressRing.style.strokeDasharray = strokeDasharray;    
+        document.getElementById('campaignProgressText').textContent = `${Math.round(progress)}%`;
+      });
+    }
+
+    // Get 24h count (unique emails first-sent in last 24h)
+    function get24hCount() {
+      const now = Date.now();
+      const twentyFourHoursAgo = now - 86400000;  // 24h in ms
+      return recentSends.filter(item => item.timestamp > twentyFourHoursAgo).length;
+    }
+
+    // Get today-only count (midnight to now, for summary)
+    function getTodayCount() {
+      const now = new Date();
+      const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+      return recentSends.filter(item => item.timestamp >= todayMidnight).length;
+    }
+
+    // Update 24h display (real-time)
+    function update24hDisplay() {
+      const count = get24hCount();
+      const todayCount = getTodayCount();
+      const totalRecent = recentSends.length;
+      const progress = totalRecent > 0 ? Math.min((count / totalRecent) * 100, 100) : 0;
+      const avgPerHour = todayCount > 0 ? Math.round(todayCount / (new Date().getHours() + 1)) : 0;
+      const estCompletion = Math.min((count / 500) * 100, 100);
+
+      // Compute peak hour
+      let peakHour = 'N/A';
+      if (recentSends.length > 0) {
+        const hourCount = {};
+        recentSends.forEach(item => {
+          const hour = new Date(item.timestamp).getHours();
+          hourCount[hour] = (hourCount[hour] || 0) + 1;
+        });
+        peakHour = Object.entries(hourCount).reduce((max, [hour, cnt]) => cnt > max[1] ? [hour, cnt] : max, [0, 0])[0];
+      }
+
+      // Update DOM
+      document.getElementById('24hSentCount').textContent = count;
+      document.getElementById('24hProgressBar').style.width = `${progress}%`;
+      document.getElementById('todayTotal').textContent = todayCount;
+      document.getElementById('avgPerHour').textContent = avgPerHour;
+      document.getElementById('estCompletion').textContent = `${Math.round(estCompletion)}%`;
+      document.getElementById('peakHour').textContent = peakHour;
+    }
+
+    // Toggle summary panel
+    document.getElementById('toggleSummary').addEventListener('click', function() {
+      const panel = document.getElementById('summaryPanel');
+      panel.classList.toggle('hidden');
+      panel.classList.toggle('show');
+      this.innerHTML = panel.classList.contains('show') ? 
+        '<i class="ri-eye-off-line"></i> Hide Summary' : 
+        '<i class="ri-eye-line"></i> View Summary';
+    });
+
+    // Manual reset for testing
+    document.getElementById('resetTracker').addEventListener('click', function() {
+      if (confirm('Reset 24h tracker? (For testing only)')) {
+        recentSends = [];
+        localStorage.setItem('recentSends', '[]');
+        update24hDisplay();
+        showAlert('24h tracker reset!', 'warning');
+      }
+    });
+
+    // Smart analytics
+    function updateAnalytics() {
+      const total = allGeneratedEmails.length;
+      const sent = allTimeSent.size;
+      
+      if (total > 0) {
+        const sentPercent = (sent / total) * 100;
+        const grade = sentPercent >= 80 ? 'A+' : sentPercent >= 60 ? 'A' : sentPercent >= 40 ? 'B+' : sentPercent >= 20 ? 'B' : 'C';
+        document.getElementById('perfScore').textContent = grade;
       }
     }
-    
-    // Remove duplicates
-    const uniqueEmails = [...new Set(emailList.map(e => e.toLowerCase()))];
-    
-    if (uniqueEmails.length > 0) {
-      elements.recipientsInput.value = uniqueEmails.slice(0, 20000).join('\\\\n');
-      elements.recipientsInput.dispatchEvent(new Event('input'));
-      showAlert(\\\`🎉 Smart extraction complete! Found \\\${uniqueEmails.length} unique emails.\\\`);
-      addLiveActivity(\\\`📁 Processed file: \\\${uniqueEmails.length} emails extracted\\\`);
-    } else {
-      showAlert('No valid email addresses found in the file.', 'error');
-    }
-    
-    setTimeout(() => {
-      uploadBtn.innerHTML = originalBtnText;
-      uploadBtn.disabled = false;
-      endProgress();
-    }, 500);
-  };
-  
-  reader.readAsText(file);
-});
 
-// Quick Actions Toolbar
-elements.toggleQuickActions.addEventListener('click', function() {
-  const isShown = elements.quickActions.classList.contains('show');
-  
-  if (isShown) {
-    elements.quickActions.classList.remove('show');
-    elements.quickActionsIcon.classList.replace('ri-arrow-left-line', 'ri-arrow-right-line');
-  } else {
-    elements.quickActions.classList.add('show');
-    elements.quickActionsIcon.classList.replace('ri-arrow-right-line', 'ri-arrow-left-line');
+    // Smart domain stats
+    function updateDomainStats() {
+      const domainStatsContainer = document.getElementById('domainStats');
+      
+      const sortedDomains = Object.entries(domainStats)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 5);
+      
+      if (sortedDomains.length === 0) {
+        domainStatsContainer.innerHTML = '<div class="flex items-center justify-between text-xs"><span class="text-gray-600 dark:text-gray-400">No data available</span></div>';
+        return;
+      }
+      
+      const fragment = document.createDocumentFragment();
+      sortedDomains.forEach(([domain, count]) => {
+        const domainElement = document.createElement('div');
+        domainElement.className = 'flex items-center justify-between text-xs';
+        domainElement.innerHTML = `
+          <span class="text-gray-700 dark:text-gray-300">${domain}</span>
+          <span class="font-medium text-blue-500">${count}</span>
+        `;
+        fragment.appendChild(domainElement);
+      });
+      
+      domainStatsContainer.innerHTML = '';
+      domainStatsContainer.appendChild(fragment);
+    }
+
+    // Live activity feed
+    function addLiveActivity(message) {
+      const activityFeed = document.getElementById('liveActivity');
+      const timestamp = new Date().toLocaleTimeString();
+      const activity = document.createElement('div');
+      activity.className = 'text-xs text-gray-600 dark:text-gray-400 animate-fadeIn';
+      activity.textContent = `[${timestamp}] ${message}`;
+      
+      activityFeed.insertBefore(activity, activityFeed.firstChild);
+      
+      // Keep only last 10 activities
+      while (activityFeed.children.length > 10) {
+        activityFeed.removeChild(activityFeed.lastChild);
+      }
+      
+      activityFeed.scrollTop = 0;
+    }
+
+    // Global search with AI commands
+    const performGlobalSearch = debounce(function (query) {
+      const lowerQuery = query.toLowerCase();
+      
+      // Handle AI commands
+      if (lowerQuery.startsWith('find:')) {
+        const domain = lowerQuery.replace('find:', '').trim();
+        filterByDomain(domain);
+        return;
+      }
+      
+      if (lowerQuery.startsWith('sort:')) {
+        const sortType = lowerQuery.replace('sort:', '').trim();
+        sortEmails(sortType);
+        return;
+      }
+      
+      if (lowerQuery.startsWith('filter:')) {
+        const filterType = lowerQuery.replace('filter:', '').trim();
+        if (filterType === 'unsent') setActiveFilter('pending');
+        else if (filterType === 'sent') setActiveFilter('sent');
+        return;
+      }
+      
+      // Regular search
+      const emailLinks = document.querySelectorAll('#generatedLinks a');
+      let foundAny = false;
+
+      emailLinks.forEach(link => {
+        const text = link.textContent.toLowerCase();
+        const match = text.includes(lowerQuery);
+        foundAny = foundAny || match;
+        
+        const email = link.textContent.split('. ')[1];
+        const isSent = allTimeSent.has(email);
+        
+        let shouldShow = match;
+        if (currentFilter === 'sent' && !isSent) shouldShow = false;
+        if (currentFilter === 'pending' && isSent) shouldShow = false;
+        
+        link.style.display = shouldShow ? 'block' : 'none';
+        link.style.backgroundColor = match && lowerQuery ? 'rgba(74, 222, 128, 0.1)' : '';
+      });
+    }, 150);
+
+    function debounce(func, delay) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+      };
+    }
+
+    elements.globalEmailSearch.addEventListener('input', function () {
+      performGlobalSearch(this.value);
+    });
+
+    // Search suggestions
+    elements.globalEmailSearch.addEventListener('focus', function() {
+      document.getElementById('searchSuggestions').classList.remove('hidden');
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('#globalEmailSearch') && !e.target.closest('#searchSuggestions')) {
+        document.getElementById('searchSuggestions').classList.add('hidden');
+      }
+    });
+
+    // AI command handling
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('[data-command]')) {
+        const command = e.target.closest('[data-command]').dataset.command;
+        elements.globalEmailSearch.value = command;
+        performGlobalSearch(command);
+        document.getElementById('searchSuggestions').classList.add('hidden');
+      }
+    });
+
+    // Smart file upload
+    document.getElementById('csvUpload').addEventListener('change', function () {
+      const fileInput = this;
+      const fileNameDisplay = document.getElementById('fileName');
+      
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        fileNameDisplay.innerHTML = `<i class="ri-file-check-line mr-2 text-green-500"></i>${file.name}`;
+      } else {
+        fileNameDisplay.innerHTML = '<i class="ri-file-line mr-2"></i>No file selected';
+      }
+    });
+
+    document.getElementById('uploadCSV').addEventListener('click', function() {
+      const fileInput = document.getElementById('csvUpload');
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        showAlert('Please select a file to upload.', 'error');
+        return;
+      }
+      
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      if (!['csv', 'txt', 'xlsx', 'xls'].includes(fileExtension)) {
+        showAlert('Please upload a valid CSV, TXT, or Excel file.', 'error');
+        return;
+      }
+      
+      const uploadBtn = this;
+      const originalBtnText = uploadBtn.innerHTML;
+      uploadBtn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Smart Processing...';
+      uploadBtn.disabled = true;
+      
+      startProgress('Smart file processing');
+      
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const contents = event.target.result;
+        
+        // Smart email extraction
+        const emailPattern = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+        const emailList = [];
+        let match;
+        
+        while ((match = emailPattern.exec(contents)) !== null) {
+          emailList.push(match[0]);
+        }
+        
+        // Remove duplicates
+        const uniqueEmails = [...new Set(emailList.map(e => e.toLowerCase()))];
+        
+        if (uniqueEmails.length > 0) {
+          elements.recipientsInput.value = uniqueEmails.slice(0, 20000).join('\n');
+          elements.recipientsInput.dispatchEvent(new Event('input'));
+          showAlert(`🎉 Smart extraction complete! Found ${uniqueEmails.length} unique emails.`);
+          addLiveActivity(`📁 Processed file: ${uniqueEmails.length} emails extracted`);
+        } else {
+          showAlert('No valid email addresses found in the file.', 'error');
+        }
+        
+        setTimeout(() => {
+          uploadBtn.innerHTML = originalBtnText;
+          uploadBtn.disabled = false;
+          endProgress();
+        }, 500);
+      };
+      
+      reader.readAsText(file);
+    });
+
+    // Quick Actions Toolbar
+    elements.toggleQuickActions.addEventListener('click', function() {
+      const isShown = elements.quickActions.classList.contains('show');
+      
+      if (isShown) {
+        elements.quickActions.classList.remove('show');
+        elements.quickActionsIcon.classList.replace('ri-arrow-left-line', 'ri-arrow-right-line');
+      } else {
+        elements.quickActions.classList.add('show    elements.quickActionsIcon.classList.replace('ri-arrow-right-line', 'ri-arrow-left-line');
   }
 });
 
