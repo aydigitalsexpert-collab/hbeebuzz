@@ -2416,32 +2416,132 @@ window.addEventListener('load', initPopUpConsent); document.getElementById('inst
     elements.resumeAuto.addEventListener('click', resumeAutoSend);
     elements.stopAuto.addEventListener('click', stopAutoSend);
 
-    // Lightning-fast email processing
-    function processEmails(recipientList, subjectTemplate, bodyTemplate) {
-      const submitBtn = elements.emailForm.querySelector('button[type="submit"]');
-      const originalBtnText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Processing...';
-      submitBtn.disabled = true;
-      
-      startProgress('Processing emails');
-      
-      const mailtoLinksDiv = document.getElementById('generatedLinks');
-      mailtoLinksDiv.innerHTML = '';
-      allGeneratedEmails = [];
-      
-      elements.mailtoLinks.classList.remove('hidden');
-      elements.emptyState.classList.add('hidden');
-      
-      const batchSize = parseInt(document.getElementById('batchSize').value) || 50;
-      const totalEmails = recipientList.filter(r => r.trim()).length;
-      let processedCount = 0;
+    // Replace the processEmails function with this updated version
+function processEmails(recipientList, subjectTemplate, bodyTemplate) {
+  const submitBtn = elements.emailForm.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn.innerHTML;
+  submitBtn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Processing...';
+  submitBtn.disabled = true;
+  
+  startProgress('Processing emails');
+  
+  const mailtoLinksDiv = document.getElementById('generatedLinks');
+  mailtoLinksDiv.innerHTML = '';
+  allGeneratedEmails = [];
+  
+  elements.mailtoLinks.classList.remove('hidden');
+  elements.emptyState.classList.add('hidden');
+  
+  const batchSize = parseInt(document.getElementById('batchSize').value) || 50;
+  const totalEmails = recipientList.filter(r => r.trim()).length;
+  let processedCount = 0;
 
-      updateCounters();
+  updateCounters();
+    
+      // Updated worker code with proper HTML handling
+  const workerCode = `
+    function extractNameFromEmail(email) {
+      // ... keep the existing name extraction logic ...
+      // (I've omitted it for brevity, but keep your existing implementation)
+      return 'there'; // placeholder
+    }
+    
+    function extractCompanyFromEmail(email) {
+      const domain = email.split('@')[1] ? email.split('@')[1].split('.')[0] : 'Company';
+      return domain.charAt(0).toUpperCase() + domain.slice(1);
+    }
 
-      // Optimized worker code with faster name extraction
-      const workerCode = `
-        function extractNameFromEmail(email) {
-          if (!email || !email.includes('@')) return 'there';
+    function personalizeContent(template, name, company) {
+      return template.replace(/{name}/g, name).replace(/{company}/g, company);
+    }
+
+    self.onmessage = function(e) {
+      const { emails, subjectTemplate, bodyTemplate, startIndex, isRichText } = e.data;
+      
+      const results = emails.map((email, idx) => {
+        const trimmedEmail = email.trim();
+        if (!trimmedEmail || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(trimmedEmail)) return null;
+        
+        const name = extractNameFromEmail(trimmedEmail);
+        const company = extractCompanyFromEmail(trimmedEmail);
+        const personalizedSubject = encodeURIComponent(personalizeContent(subjectTemplate, name, company));
+        
+        let personalizedBody;
+        if (isRichText) {
+          // For rich text, we need to properly encode HTML for mailto
+          const personalizedHTML = personalizeContent(bodyTemplate, name, company);
+          // Convert HTML to plain text for mailto links (most email clients don't support HTML in mailto)
+          personalizedBody = encodeURIComponent(convertHTMLToPlainText(personalizedHTML)).replace(/\\n/g, '%0D%0A');
+        } else {
+          personalizedBody = encodeURIComponent(personalizeContent(bodyTemplate, name, company)).replace(/\\n/g, '%0D%0A');
+        }
+        
+        return {
+          email: trimmedEmail,
+          mailto: \`mailto:\${trimmedEmail}?subject=\${personalizedSubject}&body=\${personalizedBody}\`,
+          index: startIndex + idx,
+          isRichText: isRichText,
+          htmlContent: isRichText ? personalizeContent(bodyTemplate, name, company) : null
+        };
+      }).filter(item => item !== null);
+      
+      self.postMessage(results);
+    }
+    
+    function convertHTMLToPlainText(html) {
+      // Create a temporary div element
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      
+      // Convert to plain text while preserving line breaks
+      let text = tempDiv.textContent || tempDiv.innerText || '';
+      
+      // Preserve line breaks from <br> tags
+      text = text.replace(/<br\\s*\\/?>/gi, '\\n');
+      
+      // Remove extra whitespace
+      text = text.replace(/\\s+/g, ' ').trim();
+      
+      return text;
+    }
+  `;
+  
+  const worker = new Worker(URL.createObjectURL(new Blob([workerCode], {type: 'text/javascript'})));
+  
+  let currentBatch = 0;
+  
+  function processBatch() {
+    const start = currentBatch * batchSize;
+    const end = Math.min(start + batchSize, recipientList.length);
+    const batch = recipientList.slice(start, end);
+    
+    if (batch.length === 0) {
+      finishProcessing();
+      return;
+    }
+    
+    worker.postMessage({
+      emails: batch,
+      subjectTemplate,
+      bodyTemplate,
+      startIndex: start,
+      isRichText: isRichTextMode
+    });
+    
+    currentBatch++;
+  }
+  
+  worker.onmessage = function(e) {
+    const results = e.data;
+    
+    const fragment = document.createDocumentFragment();
+    
+    results.forEach(result => {
+      const linkElement = document.createElement('a');
+      linkElement.href = result.mailto;
+      linkElement.className = 'email-link text-green-500 block transition-colors';
+      linkElement.innerText = `${result.index + 1}. ${result.email}`;
+      linkElement.target = "_blank";
           
           const commonFirstNames = [
             'john', 'jane', 'david', 'mary', 'james', 'linda', 'robert', 'michael', 'sarah', 'william', 
