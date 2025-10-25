@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -965,6 +966,12 @@
   }
 </script>
 
+
+    <!-- === ADDED: DOMPurify + Juice (for client-side sanitization & CSS inlining) === -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/juice@8.1.0/lib/juice.min.js"></script>
+    <!-- === END ADDED SCRIPTS === -->
+    
 </head>
 
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen flex flex-col">
@@ -1550,7 +1557,36 @@
 
 
         
-            <!-- Submit Button -->
+            
+
+<!-- INLINE PREVIEW + MODAL (ADDED) -->
+<div id="emailPreviewWrapper" class="mt-4 hidden">
+  <h4 class="text-sm font-medium mb-2">Rendered Preview</h4>
+  <div id="emailPreview" class="gmail-card p-4 overflow-auto" style="max-height:520px;">
+    <!-- Rendered HTML will be injected here -->
+  </div>
+</div>
+
+<div id="previewModal" aria-hidden="true" class="fixed inset-0 z-50 hidden items-center justify-center">
+  <div class="absolute inset-0 bg-[rgba(10,16,32,0.7)]" id="previewModalBackdrop"></div>
+  <div class="relative max-w-3xl w-full mx-4">
+    <div class="bg-[#0A1020] dark:bg-[#0A1020] rounded-lg shadow-xl overflow-hidden border border-[#0E76C6]">
+      <div class="px-4 py-3 flex items-center justify-between border-b" style="border-color: rgba(14,118,198,0.12);">
+        <div class="font-semibold text-white">HbeeBuzz — Gmail-style Preview</div>
+        <div class="flex items-center gap-2">
+          <button id="openInNewTab" class="gmail-btn-secondary px-3 py-1 text-xs">Open in new tab</button>
+          <button id="closePreviewModal" class="gmail-btn px-3 py-1 text-sm">Close</button>
+        </div>
+      </div>
+
+      <div id="previewModalContent" class="p-4 max-h-[70vh] overflow-auto bg-[#071024] text-white">
+        <!-- Rendered HTML will be injected here for modal -->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END INLINE PREVIEW + MODAL -->
+<!-- Submit Button -->
             <button type="submit" class="w-full gmail-btn py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all flex items-center justify-center gap-2 text-lg font-semibold">
               <i class="ri-rocket-line text-xl"></i>
               Generate Emails
@@ -3431,5 +3467,122 @@
  </script>
 
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6f6b93c9e7c5c1714c3c6e0a0a2c2e2e2e2e2e2e2e2e2e" integrity="sha384-8eFP" crossorigin="anonymous"></script>
+
+<!-- ====== START: Email Preview + Inliner Script (ADDED) ====== -->
+<script>
+(function () {
+  const previewBtn = document.getElementById("previewEmail");
+  const testBtn = document.getElementById("sendTestEmail");
+  const bodyTextarea = document.getElementById("htmlEditor") || document.getElementById("body") || document.getElementById("richTextEditor");
+  const inlineWrapper = document.getElementById("emailPreviewWrapper");
+  const inlinePreview = document.getElementById("emailPreview");
+  const modal = document.getElementById("previewModal");
+  const modalContent = document.getElementById("previewModalContent");
+  const closeModalBtn = document.getElementById("closePreviewModal");
+  const backdrop = document.getElementById("previewModalBackdrop");
+  const openInNewTabBtn = document.getElementById("openInNewTab");
+
+  function getRawHtml() {
+    if (!bodyTextarea) return '';
+    // If richTextEditor (contenteditable), use innerHTML
+    if (bodyTextarea.contentEditable === "true") return bodyTextarea.innerHTML;
+    // If textarea, return its value
+    return bodyTextarea.value || bodyTextarea.innerHTML || '';
+  }
+
+  function inlineCss(html) {
+    try {
+      if (window.juice && typeof window.juice.inlineContent === "function") {
+        return window.juice.inlineContent(html);
+      }
+      return html;
+    } catch (err) {
+      console.warn("Juice inlining failed:", err);
+      return html;
+    }
+  }
+
+  function sanitizeHtml(html) {
+    try {
+      if (window.DOMPurify && typeof window.DOMPurify.sanitize === "function") {
+        return window.DOMPurify.sanitize(html, { SAFE_FOR_TEMPLATES: true });
+      }
+    } catch (err) {
+      console.warn("DOMPurify failed:", err);
+    }
+    return html;
+  }
+
+  function renderPreview(rawHtml) {
+    const inlined = inlineCss(rawHtml);
+    const safe = sanitizeHtml(inlined);
+
+    if (inlinePreview) inlinePreview.innerHTML = safe;
+    if (modalContent) modalContent.innerHTML = safe;
+    if (inlineWrapper) inlineWrapper.classList.remove("hidden");
+    if (inlineWrapper) inlineWrapper.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function openModal() {
+    if (!modal) return;
+    modal.classList.remove("hidden");
+    modal.style.display = "flex";
+    modal.setAttribute("aria-hidden", "false");
+  }
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.add("hidden");
+    modal.style.display = "none";
+    modal.setAttribute("aria-hidden", "true");
+  }
+
+  if (previewBtn) {
+    previewBtn.addEventListener("click", function(e) {
+      e.preventDefault();
+      const raw = getRawHtml() || '';
+      if (!raw.trim()) {
+        alert("Please paste or write your email HTML into the Message Body first.");
+        return;
+      }
+      renderPreview(raw);
+      openModal();
+    });
+  }
+
+  if (testBtn) {
+    testBtn.addEventListener("click", function(e) {
+      e.preventDefault();
+      const raw = getRawHtml() || '';
+      if (!raw.trim()) { alert("Please paste your HTML first."); return; }
+      const inlined = inlineCss(raw);
+      const safe = sanitizeHtml(inlined);
+      const blob = new Blob([safe], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    });
+  }
+
+  if (closeModalBtn) closeModalBtn.addEventListener("click", closeModal);
+  if (backdrop) backdrop.addEventListener("click", closeModal);
+  document.addEventListener("keydown", function(ev){ if (ev.key === "Escape") closeModal(); });
+
+  if (openInNewTabBtn) {
+    openInNewTabBtn.addEventListener("click", function() {
+      const raw = getRawHtml() || '';
+      if (!raw.trim()) { alert("No HTML to open."); return; }
+      const inlined = inlineCss(raw);
+      const safe = sanitizeHtml(inlined);
+      const blob = new Blob([safe], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    });
+  }
+
+})();
+</script>
+<!-- ====== END: Email Preview + Inliner Script (ADDED) ====== -->
+
 </body>
 </html>
